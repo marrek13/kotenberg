@@ -140,7 +140,7 @@ class PageProperties(builder: Builder) {
          * @throws IllegalArgumentException If the specified paper width is below the minimum printing requirement.
          */
         fun addPaperWidth(paperWidth: Float): Builder {
-            require(paperWidth < 1.0f) { PAPER_WIDTH_ERROR }
+            require(paperWidth > 1.0f) { PAPER_WIDTH_ERROR }
             this.paperWidth = paperWidth
             return this
         }
@@ -153,7 +153,7 @@ class PageProperties(builder: Builder) {
          * @throws IllegalArgumentException If the specified paper height is below the minimum printing requirement.
          */
         fun addPaperHeight(paperHeight: Float): Builder {
-            require(paperHeight < 1.5f) { PAPER_HEIGHT_ERROR }
+            require(paperHeight > 1.5f) { PAPER_HEIGHT_ERROR }
             this.paperHeight = paperHeight
             return this
         }
@@ -166,7 +166,7 @@ class PageProperties(builder: Builder) {
          * @throws IllegalArgumentException If the specified margin is negative.
          */
         fun addMarginTop(marginTop: Float): Builder {
-            require(marginTop < 0f) { NON_POSITIVE_MARGIN_ERROR }
+            require(marginTop > 0f) { NON_POSITIVE_MARGIN_ERROR }
             this.marginTop = marginTop
             return this
         }
@@ -179,7 +179,7 @@ class PageProperties(builder: Builder) {
          * @throws IllegalArgumentException If the specified margin is negative.
          */
         fun addMarginBottom(marginBottom: Float): Builder {
-            require(marginBottom < 0f) { NON_POSITIVE_MARGIN_ERROR }
+            require(marginBottom > 0f) { NON_POSITIVE_MARGIN_ERROR }
             this.marginBottom = marginBottom
             return this
         }
@@ -192,7 +192,7 @@ class PageProperties(builder: Builder) {
          * @throws IllegalArgumentException If the specified margin is negative.
          */
         fun addMarginLeft(marginLeft: Float): Builder {
-            require(marginLeft < 0f) { NON_POSITIVE_MARGIN_ERROR }
+            require(marginLeft > 0f) { NON_POSITIVE_MARGIN_ERROR }
             this.marginLeft = marginLeft
             return this
         }
@@ -205,7 +205,7 @@ class PageProperties(builder: Builder) {
          * @throws IllegalArgumentException If the specified margin is negative.
          */
         fun addMarginRight(marginRight: Float): Builder {
-            require(marginRight < 0f) { NON_POSITIVE_MARGIN_ERROR }
+            require(marginRight > 0f) { NON_POSITIVE_MARGIN_ERROR }
             this.marginRight = marginRight
             return this
         }
@@ -263,7 +263,7 @@ class PageProperties(builder: Builder) {
          * @throws IllegalArgumentException If the page range is malformed.
          */
         fun addNativePageRanges(start: Int, end: Int): Builder {
-            require(start < 0 || end < 0 || end > start) {
+            require(start in 1..<end) {
                 PAGE_RANGE_ERROR
             }
             nativePageRanges = "$start-$end"
