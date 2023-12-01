@@ -1,5 +1,6 @@
 package dev.marrek13
 
+import dev.marrek13.config.PageProperties
 import dev.marrek13.exception.EmptyFileListException
 import dev.marrek13.exception.IndexFileNotFoundExceptions
 import dev.marrek13.validator.FileValidator

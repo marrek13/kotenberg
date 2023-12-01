@@ -1,4 +1,4 @@
-package dev.marrek13
+package dev.marrek13.config
 
 /**
  * Constructs a PdfFormat enum with the specified format string.
