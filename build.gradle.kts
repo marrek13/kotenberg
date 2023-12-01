@@ -1,17 +1,23 @@
 plugins {
-    kotlin("jvm") version "1.9.21"
+    alias(libs.plugins.kotlin.jvm)
+    alias(libs.plugins.spotless)
 }
 
 group = "dev.marrek13"
 version = "1.0.0"
 
 dependencies {
-    implementation("org.apache.httpcomponents:httpclient:4.5.13")
-    implementation("org.apache.httpcomponents:httpmime:4.5.13")
-    implementation("commons-io:commons-io:2.11.0")
+    implementation(libs.apache.http.components.client)
+    implementation(libs.apache.http.components.mime)
+    implementation(libs.commons.io)
+
+    testImplementation(libs.junit.jupiter.api)
+    testImplementation(libs.junit.jupiter.params)
+    testRuntimeOnly(libs.junit.jupiter.engine)
+    testImplementation(libs.kotlinx.coroutines.test)
 }
 
-tasks{
+tasks {
     test {
         useJUnitPlatform()
     }
@@ -19,4 +25,17 @@ tasks{
 
 repositories {
     mavenCentral()
+}
+
+spotless {
+    kotlin {
+        target("**/*.kt")
+        targetExclude("${layout.buildDirectory.asFile.get()}/**/*.kt")
+        ktlint()
+    }
+
+    kotlinGradle {
+        target("*.gradle.kts")
+        ktlint()
+    }
 }

@@ -40,7 +40,10 @@ class Kotenberg(private val endpoint: String) : AutoCloseable {
      * @return A CloseableHttpResponse containing the result of the conversion.
      * @throws IOException If an I/O error occurs during the conversion process.
      */
-    fun convertUrl(url: String, pageProperties: PageProperties): CloseableHttpResponse {
+    fun convertUrl(
+        url: String,
+        pageProperties: PageProperties,
+    ): CloseableHttpResponse {
         if (!UrlValidator.isValidURL(url)) {
             throw MalformedURLException()
         }
@@ -56,7 +59,10 @@ class Kotenberg(private val endpoint: String) : AutoCloseable {
      * @return A CloseableHttpResponse containing the result of the conversion.
      * @throws IOException If an I/O error occurs during the conversion process.
      */
-    fun convertHtml(files: List<File>, pageProperties: PageProperties): CloseableHttpResponse =
+    fun convertHtml(
+        files: List<File>,
+        pageProperties: PageProperties,
+    ): CloseableHttpResponse =
         files
             .ifEmpty { throw EmptyFileListException() }
             .also { if (!FileValidator.containsIndex(it)) throw IndexFileNotFoundExceptions() }
@@ -73,7 +79,10 @@ class Kotenberg(private val endpoint: String) : AutoCloseable {
      * @return A CloseableHttpResponse containing the result of the conversion.
      * @throws IOException If an I/O error occurs during the conversion process.
      */
-    fun convertMarkdown(files: List<File>, pageProperties: PageProperties): CloseableHttpResponse =
+    fun convertMarkdown(
+        files: List<File>,
+        pageProperties: PageProperties,
+    ): CloseableHttpResponse =
         files
             .ifEmpty { throw EmptyFileListException() }
             .also { if (!FileValidator.containsIndex(it)) throw IndexFileNotFoundExceptions() }
@@ -93,16 +102,18 @@ class Kotenberg(private val endpoint: String) : AutoCloseable {
      * @return A CloseableHttpResponse containing the result of the conversion.
      * @throws IOException If an I/O error occurs during the conversion process.
      */
-    fun convertWithLibreOffice(files: List<File>, pageProperties: PageProperties): CloseableHttpResponse =
+    fun convertWithLibreOffice(
+        files: List<File>,
+        pageProperties: PageProperties,
+    ): CloseableHttpResponse =
         files
             .ifEmpty { throw EmptyFileListException() }
-            .filter(FileValidator::isSupported)
-            .ifEmpty { throw FileNotFoundException("File extensions are not supported by Libre Office. Please refer to https://gotenberg.dev/docs/modules/libreoffice for more details.") }
+            .filter(FileValidator::isSupportedByLibreOffice)
+            .ifEmpty { throw FileNotFoundException(LIBRE_OFFICE_UNSUPPORTED_FILE_ERROR.trimIndent()) }
             .forEach { multipartEntityBuilder.addBinaryBody(it.getName(), it) }
             .let {
                 executeHttpPostRequest(endpoint + LIBRE_OFFICE_ROUTE, pageProperties)
             }
-
 
     /**
      * Converts a list of documents using PDF Engines.
@@ -112,8 +123,10 @@ class Kotenberg(private val endpoint: String) : AutoCloseable {
      * @return A CloseableHttpResponse containing the result of the conversion.
      * @throws IOException If an I/O error occurs during the conversion process.
      */
-    fun convertWithPdfEngines(files: List<File>, pageProperties: PageProperties): CloseableHttpResponse =
-        getPdfEnginesHttpResponse(files, pageProperties, PDF_ENGINES_CONVERT_ROUTE)
+    fun convertWithPdfEngines(
+        files: List<File>,
+        pageProperties: PageProperties,
+    ): CloseableHttpResponse = getPdfEnginesHttpResponse(files, pageProperties, PDF_ENGINES_CONVERT_ROUTE)
 
     /**
      * Merges a list of PDF documents using PDF Engines.
@@ -123,8 +136,10 @@ class Kotenberg(private val endpoint: String) : AutoCloseable {
      * @return A CloseableHttpResponse containing the result of the merge.
      * @throws IOException If an I/O error occurs during the merge process.
      */
-    fun mergeWithPdfEngines(files: List<File>, pageProperties: PageProperties): CloseableHttpResponse =
-        getPdfEnginesHttpResponse(files, pageProperties, PDF_ENGINES_MERGE_ROUTE)
+    fun mergeWithPdfEngines(
+        files: List<File>,
+        pageProperties: PageProperties,
+    ): CloseableHttpResponse = getPdfEnginesHttpResponse(files, pageProperties, PDF_ENGINES_MERGE_ROUTE)
 
     /**
      * Executes an HTTP POST request for PDF Engines operations with the provided list of files, page properties,
@@ -139,10 +154,10 @@ class Kotenberg(private val endpoint: String) : AutoCloseable {
     private fun getPdfEnginesHttpResponse(
         files: List<File>,
         pageProperties: PageProperties,
-        pdfEnginesRoute: String
+        pdfEnginesRoute: String,
     ) = files
         .ifEmpty { throw EmptyFileListException() }
-        .filter(FileValidator::isPDF)
+        .filter(FileValidator::isPdf)
         .ifEmpty { throw FileNotFoundException("PDF Engines route accepts only PDF files.") }
         .forEach { multipartEntityBuilder.addBinaryBody(it.getName(), it) }
         .let { executeHttpPostRequest(endpoint + pdfEnginesRoute, pageProperties) }
@@ -155,13 +170,15 @@ class Kotenberg(private val endpoint: String) : AutoCloseable {
      * @return A CloseableHttpResponse containing the response of the request.
      * @throws IOException If an I/O error occurs during the request.
      */
-    private fun executeHttpPostRequest(route: String, pageProperties: PageProperties) =
-        buildPageProperties(pageProperties)
-            .let {
-                httpClient.execute(
-                    HttpPost(route).apply { entity = multipartEntityBuilder.build() }
-                )
-            }
+    private fun executeHttpPostRequest(
+        route: String,
+        pageProperties: PageProperties,
+    ) = buildPageProperties(pageProperties)
+        .let {
+            httpClient.execute(
+                HttpPost(route).apply { entity = multipartEntityBuilder.build() },
+            )
+        }
 
     /**
      * Builds page properties using reflection and adds them to the request entity.
@@ -182,5 +199,10 @@ class Kotenberg(private val endpoint: String) : AutoCloseable {
         private const val LIBRE_OFFICE_ROUTE = "forms/libreoffice/convert"
         private const val PDF_ENGINES_CONVERT_ROUTE = "forms/pdfengines/convert"
         private const val PDF_ENGINES_MERGE_ROUTE = "forms/pdfengines/merge"
+
+        private const val LIBRE_OFFICE_UNSUPPORTED_FILE_ERROR = """
+            File extensions are not supported by Libre Office. 
+            Please refer to https://gotenberg.dev/docs/modules/libreoffice for more details.
+        """
     }
 }

@@ -1,6 +1,5 @@
 package dev.marrek13
 
-
 /**
  * PageProperties is a class that represents various properties for configuring document conversion,
  * such as paper size, margins, and other formatting options.
@@ -97,21 +96,22 @@ class PageProperties(builder: Builder) {
      */
     private val nativePdfFormat: String = builder.nativePdfFormat
 
-    fun all(): Map<String, String> = mapOf(
-        "paperWidth" to paperWidth.toString(),
-        "paperHeight" to paperHeight.toString(),
-        "marginTop" to marginTop.toString(),
-        "marginBottom" to marginBottom.toString(),
-        "marginLeft" to marginLeft.toString(),
-        "marginRight" to marginRight.toString(),
-        "preferCssPageSize" to isPreferCssPageSize.toString(),
-        "printBackground" to isPrintBackground.toString(),
-        "landscape" to isLandscape.toString(),
-        "scale" to scale.toString(),
-        "nativePageRanges" to nativePageRanges,
-        "pdfFormat" to pdfFormat,
-        "nativePdfFormat" to nativePdfFormat
-    )
+    fun all(): Map<String, String> =
+        mapOf(
+            "paperWidth" to paperWidth.toString(),
+            "paperHeight" to paperHeight.toString(),
+            "marginTop" to marginTop.toString(),
+            "marginBottom" to marginBottom.toString(),
+            "marginLeft" to marginLeft.toString(),
+            "marginRight" to marginRight.toString(),
+            "preferCssPageSize" to isPreferCssPageSize.toString(),
+            "printBackground" to isPrintBackground.toString(),
+            "landscape" to isLandscape.toString(),
+            "scale" to scale.toString(),
+            "nativePageRanges" to nativePageRanges,
+            "pdfFormat" to pdfFormat,
+            "nativePdfFormat" to nativePdfFormat,
+        )
 
     /**
      * The Builder class is used to construct instances of PageProperties with specific configuration options.
@@ -262,7 +262,10 @@ class PageProperties(builder: Builder) {
          * @return The Builder instance for method chaining.
          * @throws IllegalArgumentException If the page range is malformed.
          */
-        fun addNativePageRanges(start: Int, end: Int): Builder {
+        fun addNativePageRanges(
+            start: Int,
+            end: Int,
+        ): Builder {
             require(start in 1..<end) {
                 PAGE_RANGE_ERROR
             }

@@ -21,6 +21,5 @@ enum class PdfFormat(val format: String) {
      * PDF/A-3b format.
      */
     @Suppress("unused")
-    A_3B("PDF/A-3b");
+    A_3B("PDF/A-3b"),
 }
-
