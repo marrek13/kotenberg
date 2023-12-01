@@ -9,7 +9,6 @@ import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ValueSource
 
 class PagePropertiesTest {
-
     @ParameterizedTest
     @ValueSource(floats = [0f, Float.MIN_VALUE, MINIMAL_PAPER_WIDTH])
     fun `should validate minimal paper width`(width: Float) {
