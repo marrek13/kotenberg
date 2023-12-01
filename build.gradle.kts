@@ -7,9 +7,8 @@ group = "dev.marrek13"
 version = "1.0.0"
 
 dependencies {
-    implementation(libs.apache.http.components.client)
-    implementation(libs.apache.http.components.mime)
-    implementation(libs.commons.io)
+    implementation(libs.ktor.client.core)
+    implementation(libs.ktor.client.cio)
 
     testImplementation(libs.junit.jupiter.api)
     testImplementation(libs.junit.jupiter.params)

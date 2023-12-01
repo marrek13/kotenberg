@@ -1,15 +1,14 @@
 [versions]
 kotlin = "1.9.21"
 spotless = "6.22.0"
-apacheHttpComponents = "4.5.13"
-commonsIo = "2.11.0"
 junit = "5.10.1"
 coroutines = "1.7.3"
+ktor="2.3.6"
 
 [libraries]
-apache_http_components_client = { module = "org.apache.httpcomponents:httpclient", version.ref = "apacheHttpComponents" }
-apache_http_components_mime = { module = "org.apache.httpcomponents:httpmime", version.ref = "apacheHttpComponents" }
-commons_io = { module = "commons-io:commons-io", version.ref = "commonsIo" }
+# Ktor
+ktor_client_core = { module = "io.ktor:ktor-client-core-jvm", version.ref = "ktor" }
+ktor_client_cio = { module = "io.ktor:ktor-client-cio-jvm", version.ref = "ktor" }
 
 # Tests
 junit_jupiter_api = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "junit" }

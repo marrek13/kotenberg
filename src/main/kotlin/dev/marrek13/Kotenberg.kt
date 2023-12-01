@@ -5,11 +5,13 @@ import dev.marrek13.exception.EmptyFileListException
 import dev.marrek13.exception.IndexFileNotFoundExceptions
 import dev.marrek13.validator.FileValidator
 import dev.marrek13.validator.UrlValidator
-import org.apache.http.client.methods.CloseableHttpResponse
-import org.apache.http.client.methods.HttpPost
-import org.apache.http.entity.mime.HttpMultipartMode
-import org.apache.http.entity.mime.MultipartEntityBuilder
-import org.apache.http.impl.client.HttpClients
+import io.ktor.client.HttpClient
+import io.ktor.client.engine.cio.CIO
+import io.ktor.client.request.forms.formData
+import io.ktor.client.request.forms.submitFormWithBinaryData
+import io.ktor.client.statement.HttpResponse
+import io.ktor.http.HttpHeaders
+import io.ktor.http.headers
 import java.io.File
 import java.io.FileNotFoundException
 import java.io.IOException
@@ -24,8 +26,7 @@ import java.net.MalformedURLException
  */
 @Suppress("unused")
 class Kotenberg(private val endpoint: String) : AutoCloseable {
-    private val multipartEntityBuilder = MultipartEntityBuilder.create().setMode(HttpMultipartMode.BROWSER_COMPATIBLE)
-    private val httpClient = HttpClients.createDefault()
+    private val httpClient = HttpClient(CIO)
 
     init {
         if (!UrlValidator.isValidURL(endpoint)) {
@@ -38,18 +39,21 @@ class Kotenberg(private val endpoint: String) : AutoCloseable {
      *
      * @param url            The URL of the document to convert.
      * @param pageProperties Page properties for the conversion.
-     * @return A CloseableHttpResponse containing the result of the conversion.
+     * @return A HttpResponse containing the result of the conversion.
      * @throws IOException If an I/O error occurs during the conversion process.
      */
-    fun convertUrl(
+    suspend fun convertUrl(
         url: String,
         pageProperties: PageProperties,
-    ): CloseableHttpResponse {
+    ): HttpResponse {
         if (!UrlValidator.isValidURL(url)) {
             throw MalformedURLException()
         }
-        multipartEntityBuilder.addTextBody("url", url)
-        return executeHttpPostRequest(endpoint + CHROMIUM_URL_ROUTE, pageProperties)
+        return executeHttpPostRequest(
+            route = CHROMIUM_URL_ROUTE,
+            pageProperties = pageProperties,
+            parameters = mapOf("url" to url),
+        )
     }
 
     /**
@@ -57,19 +61,22 @@ class Kotenberg(private val endpoint: String) : AutoCloseable {
      *
      * @param files          The list of files to convert.
      * @param pageProperties Page properties for the conversion.
-     * @return A CloseableHttpResponse containing the result of the conversion.
+     * @return A HttpResponse containing the result of the conversion.
      * @throws IOException If an I/O error occurs during the conversion process.
      */
-    fun convertHtml(
+    suspend fun convertHtml(
         files: List<File>,
         pageProperties: PageProperties,
-    ): CloseableHttpResponse =
+    ): HttpResponse =
         files
             .ifEmpty { throw EmptyFileListException() }
             .also { if (!FileValidator.containsIndex(it)) throw IndexFileNotFoundExceptions() }
-            .forEach { multipartEntityBuilder.addBinaryBody(it.getName(), it) }
             .let {
-                executeHttpPostRequest(endpoint + CHROMIUM_HTML_ROUTE, pageProperties)
+                executeHttpPostRequest(
+                    route = CHROMIUM_HTML_ROUTE,
+                    pageProperties = pageProperties,
+                    files = it,
+                )
             }
 
     /**
@@ -77,21 +84,24 @@ class Kotenberg(private val endpoint: String) : AutoCloseable {
      *
      * @param files          The list of files to convert.
      * @param pageProperties Page properties for the conversion.
-     * @return A CloseableHttpResponse containing the result of the conversion.
+     * @return A HttpResponse containing the result of the conversion.
      * @throws IOException If an I/O error occurs during the conversion process.
      */
-    fun convertMarkdown(
+    suspend fun convertMarkdown(
         files: List<File>,
         pageProperties: PageProperties,
-    ): CloseableHttpResponse =
+    ): HttpResponse =
         files
             .ifEmpty { throw EmptyFileListException() }
             .also { if (!FileValidator.containsIndex(it)) throw IndexFileNotFoundExceptions() }
             .filter(FileValidator::isMarkdown)
             .ifEmpty { throw FileNotFoundException("Chromium's markdown route accepts a single index.html and markdown files.") }
-            .forEach { multipartEntityBuilder.addBinaryBody(it.getName(), it) }
             .let {
-                executeHttpPostRequest(endpoint + CHROMIUM_MARKDOWN_ROUTE, pageProperties)
+                executeHttpPostRequest(
+                    route = CHROMIUM_MARKDOWN_ROUTE,
+                    pageProperties = pageProperties,
+                    files = it,
+                )
             }
 
     /**
@@ -100,20 +110,23 @@ class Kotenberg(private val endpoint: String) : AutoCloseable {
      *
      * @param files          The list of files to convert.
      * @param pageProperties Page properties for the conversion.
-     * @return A CloseableHttpResponse containing the result of the conversion.
+     * @return A HttpResponse containing the result of the conversion.
      * @throws IOException If an I/O error occurs during the conversion process.
      */
-    fun convertWithLibreOffice(
+    suspend fun convertWithLibreOffice(
         files: List<File>,
         pageProperties: PageProperties,
-    ): CloseableHttpResponse =
+    ): HttpResponse =
         files
             .ifEmpty { throw EmptyFileListException() }
             .filter(FileValidator::isSupportedByLibreOffice)
             .ifEmpty { throw FileNotFoundException(LIBRE_OFFICE_UNSUPPORTED_FILE_ERROR.trimIndent()) }
-            .forEach { multipartEntityBuilder.addBinaryBody(it.getName(), it) }
             .let {
-                executeHttpPostRequest(endpoint + LIBRE_OFFICE_ROUTE, pageProperties)
+                executeHttpPostRequest(
+                    route = LIBRE_OFFICE_ROUTE,
+                    pageProperties = pageProperties,
+                    files = it,
+                )
             }
 
     /**
@@ -121,26 +134,31 @@ class Kotenberg(private val endpoint: String) : AutoCloseable {
      *
      * @param files          The list of files to convert.
      * @param pageProperties Page properties for the conversion.
-     * @return A CloseableHttpResponse containing the result of the conversion.
+     * @return A HttpResponse containing the result of the conversion.
      * @throws IOException If an I/O error occurs during the conversion process.
      */
-    fun convertWithPdfEngines(
+    suspend fun convertWithPdfEngines(
         files: List<File>,
         pageProperties: PageProperties,
-    ): CloseableHttpResponse = getPdfEnginesHttpResponse(files, pageProperties, PDF_ENGINES_CONVERT_ROUTE)
+    ): HttpResponse = getPdfEnginesHttpResponse(files, pageProperties, PDF_ENGINES_CONVERT_ROUTE)
 
     /**
      * Merges a list of PDF documents using PDF Engines.
      *
      * @param files          The list of PDF files to merge.
      * @param pageProperties Page properties for the merge operation.
-     * @return A CloseableHttpResponse containing the result of the merge.
+     * @return A HttpResponse containing the result of the merge.
      * @throws IOException If an I/O error occurs during the merge process.
      */
-    fun mergeWithPdfEngines(
+    suspend fun mergeWithPdfEngines(
         files: List<File>,
         pageProperties: PageProperties,
-    ): CloseableHttpResponse = getPdfEnginesHttpResponse(files, pageProperties, PDF_ENGINES_MERGE_ROUTE)
+    ): HttpResponse =
+        getPdfEnginesHttpResponse(
+            files = files,
+            pageProperties = pageProperties,
+            pdfEnginesRoute = PDF_ENGINES_MERGE_ROUTE,
+        )
 
     /**
      * Executes an HTTP POST request for PDF Engines operations with the provided list of files, page properties,
@@ -149,10 +167,10 @@ class Kotenberg(private val endpoint: String) : AutoCloseable {
      * @param files          The list of files to process with PDF Engines.
      * @param pageProperties Page properties for the PDF Engines operation.
      * @param pdfEnginesRoute The route for the PDF Engines operation (e.g., convert or merge).
-     * @return A CloseableHttpResponse containing the result of the PDF Engines operation.
+     * @return A HttpResponse containing the result of the PDF Engines operation.
      * @throws IOException If an I/O error occurs during the PDF Engines operation.
      */
-    private fun getPdfEnginesHttpResponse(
+    private suspend fun getPdfEnginesHttpResponse(
         files: List<File>,
         pageProperties: PageProperties,
         pdfEnginesRoute: String,
@@ -160,36 +178,44 @@ class Kotenberg(private val endpoint: String) : AutoCloseable {
         .ifEmpty { throw EmptyFileListException() }
         .filter(FileValidator::isPdf)
         .ifEmpty { throw FileNotFoundException("PDF Engines route accepts only PDF files.") }
-        .forEach { multipartEntityBuilder.addBinaryBody(it.getName(), it) }
-        .let { executeHttpPostRequest(endpoint + pdfEnginesRoute, pageProperties) }
+        .let {
+            executeHttpPostRequest(
+                route = endpoint + pdfEnginesRoute,
+                pageProperties = pageProperties,
+                files = it,
+            )
+        }
 
     /**
      * Executes an HTTP POST request with the provided route and page properties.
      *
      * @param route          The route for the POST request.
      * @param pageProperties Page properties for the request.
-     * @return A CloseableHttpResponse containing the response of the request.
+     * @return A HttpResponse containing the response of the request.
      * @throws IOException If an I/O error occurs during the request.
      */
-    private fun executeHttpPostRequest(
+    private suspend fun executeHttpPostRequest(
         route: String,
         pageProperties: PageProperties,
-    ) = buildPageProperties(pageProperties)
-        .let {
-            httpClient.execute(
-                HttpPost(route).apply { entity = multipartEntityBuilder.build() },
-            )
-        }
-
-    /**
-     * Builds page properties using reflection and adds them to the request entity.
-     *
-     * @param pageProperties Page properties to add to the request entity.
-     */
-    private fun buildPageProperties(pageProperties: PageProperties) =
-        pageProperties.all().forEach { (name, value) ->
-            multipartEntityBuilder.addTextBody(name, value)
-        }
+        parameters: Map<String, String> = emptyMap(),
+        files: List<File> = emptyList(),
+    ) = httpClient.submitFormWithBinaryData(
+        url = endpoint + route,
+        formData =
+            formData {
+                pageProperties.all().forEach { (key, value) -> append(key, value) }
+                parameters.forEach { (key, value) -> append(key, value) }
+                files.forEach { file ->
+                    append(
+                        file.name,
+                        file.readBytes(),
+                        headers {
+                            append(HttpHeaders.ContentDisposition, "filename=\"${file.name}\"")
+                        },
+                    )
+                }
+            },
+    )
 
     override fun close() = httpClient.close()
 
