@@ -1,6 +1,7 @@
 [versions]
 kotlin = "1.9.21"
 spotless = "6.22.0"
+commonsIo = "2.11.0"
 junit = "5.10.1"
 coroutines = "1.7.3"
 ktor="2.3.6"
@@ -9,6 +10,8 @@ ktor="2.3.6"
 # Ktor
 ktor_client_core = { module = "io.ktor:ktor-client-core-jvm", version.ref = "ktor" }
 ktor_client_cio = { module = "io.ktor:ktor-client-cio-jvm", version.ref = "ktor" }
+
+commons_io = { module = "commons-io:commons-io", version.ref = "commonsIo" }
 
 # Tests
 junit_jupiter_api = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "junit" }
