@@ -1,0 +1,30 @@
+version: 2
+
+updates:
+
+  # Maintain dependencies for GitHub Actions
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    open-pull-requests-limit: 20
+    schedule:
+      interval: "weekly"
+      day: "sunday"
+      time: "02:00"
+    labels:
+      - "type: dependencies"
+      - "relates-to: build"
+
+  # Maintain dependencies for Gradle
+  - package-ecosystem: "gradle"
+    directory: "/"
+    open-pull-requests-limit: 20
+    schedule:
+      interval: "weekly"
+      day: "sunday"
+      time: "02:00"
+    labels:
+      - "type: dependencies"
+      - "relates-to: build"
+
+# See https://docs.github.com/en/free-pro-team@latest/github/administering-a-repository/keeping-your-dependencies-updated-automatically
+# for more information about configuring Dependabot.
