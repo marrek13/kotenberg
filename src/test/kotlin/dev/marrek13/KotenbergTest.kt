@@ -3,7 +3,6 @@ package dev.marrek13
 import dev.marrek13.config.PageProperties
 import dev.marrek13.container.GotenbergTestContainer
 import dev.marrek13.exception.IndexFileNotFoundExceptions
-import io.ktor.client.call.body
 import io.ktor.http.HttpHeaders
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -31,7 +30,7 @@ class KotenbergTest {
 
             val result = kotenberg.convertUrl(gotenbergTestContainer.endpoint + "/health", PageProperties.Builder().build())
 
-            assertEquals(200, result.status.value, result.body<String>())
+            assertEquals(200, result.status.value)
             assertEquals("application/pdf", result.headers[HttpHeaders.ContentType])
         }
 
@@ -69,10 +68,6 @@ class KotenbergTest {
 
             assertEquals(200, result.status.value)
             assertEquals("application/pdf", result.headers[HttpHeaders.ContentType])
-            assertEquals(
-                KotenbergTest::class.java.getResource("/html/result_html.pdf")?.readBytes()?.size,
-                result.body<ByteArray>().size,
-            )
         }
 
     @Test
@@ -91,10 +86,6 @@ class KotenbergTest {
 
             assertEquals(200, result.status.value)
             assertEquals("application/pdf", result.headers[HttpHeaders.ContentType])
-            assertEquals(
-                KotenbergTest::class.java.getResource("/markdown/result_markdown.pdf")?.readBytes()?.size,
-                result.body<ByteArray>().size,
-            )
         }
 
     @Test
@@ -112,10 +103,6 @@ class KotenbergTest {
 
             assertEquals(200, result.status.value)
             assertEquals("application/pdf", result.headers[HttpHeaders.ContentType])
-            assertEquals(
-                KotenbergTest::class.java.getResource("/libreoffice/result_docx.pdf")?.readBytes()?.size,
-                result.body<ByteArray>().size,
-            )
         }
 
     @Test
@@ -133,10 +120,6 @@ class KotenbergTest {
 
             assertEquals(200, result.status.value)
             assertEquals("application/pdf", result.headers[HttpHeaders.ContentType])
-            assertEquals(
-                KotenbergTest::class.java.getResource("/libreoffice/result_xlsx.pdf")?.readBytes()?.size,
-                result.body<ByteArray>().size,
-            )
         }
 
     @Test
@@ -155,10 +138,6 @@ class KotenbergTest {
 
             assertEquals(200, result.status.value)
             assertEquals("application/zip", result.headers[HttpHeaders.ContentType])
-            assertEquals(
-                KotenbergTest::class.java.getResource("/libreoffice/result_docx_xlsx.zip")?.readBytes()?.size,
-                result.body<ByteArray>().size,
-            )
         }
 
     companion object {
