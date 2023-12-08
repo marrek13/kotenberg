@@ -96,6 +96,14 @@ object FileValidator {
     fun isSupportedByLibreOffice(file: File) = file.isFile() && extensions.contains(FilenameUtils.getExtension(file.getName()))
 
     /**
+     * Checks if a file is an index HTML file (name: index.html).
+     *
+     * @param file The file to check.
+     * @return `true` if the file is an index HTML file, `false` otherwise.
+     */
+    fun isIndexHtml(file: File) = FilenameUtils.getName(file.getName()) == INDEX_HTML
+
+    /**
      * Checks if a file is in Markdown format (extension: .md).
      *
      * @param file The file to check.
@@ -122,5 +130,5 @@ object FileValidator {
      * @param files The list of files to check.
      * @return `true` if the list contains an index HTML file, `false` otherwise.
      */
-    fun containsIndex(files: List<File>) = files.any { it.isFile() && FilenameUtils.getName(it.getName()) == INDEX_HTML }
+    fun containsIndex(files: List<File>) = files.any { it.isFile() && isIndexHtml(it) }
 }

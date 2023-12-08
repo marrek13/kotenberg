@@ -25,14 +25,14 @@ import java.net.MalformedURLException
  * @throws MalformedURLException If the provided endpoint URL is not a valid URL.
  */
 @Suppress("unused")
-class Kotenberg(private val endpoint: String) : AutoCloseable {
-    private val httpClient = HttpClient(CIO)
-
+class Kotenberg(endpoint: String, private val httpClient: HttpClient = HttpClient(CIO)) : AutoCloseable {
     init {
         if (!UrlValidator.isValidURL(endpoint)) {
             throw MalformedURLException()
         }
     }
+
+    private val endpoint = if (endpoint.endsWith("/")) endpoint else "$endpoint/"
 
     /**
      * Converts a document from a URL using the Chromium HTML conversion route.
@@ -94,7 +94,7 @@ class Kotenberg(private val endpoint: String) : AutoCloseable {
         files
             .ifEmpty { throw EmptyFileListException() }
             .also { if (!FileValidator.containsIndex(it)) throw IndexFileNotFoundExceptions() }
-            .filter(FileValidator::isMarkdown)
+            .filter { FileValidator.isMarkdown(it) || FileValidator.isIndexHtml(it) }
             .ifEmpty { throw FileNotFoundException("Chromium's markdown route accepts a single index.html and markdown files.") }
             .let {
                 executeHttpPostRequest(

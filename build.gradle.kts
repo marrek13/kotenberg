@@ -16,6 +16,7 @@ dependencies {
     testImplementation(libs.junit.jupiter.params)
     testRuntimeOnly(libs.junit.jupiter.engine)
     testImplementation(libs.kotlinx.coroutines.test)
+    testImplementation(libs.testcontainers.jupiter)
 }
 
 tasks {

@@ -87,14 +87,14 @@ class PageProperties(builder: Builder) {
      *
      * @return The PDF format.
      */
-    private val pdfFormat: String = builder.pdfFormat
+    private val pdfFormat: PdfFormat = builder.pdfFormat
 
     /**
      * Returns the native PDF format.
      *
      * @return The native PDF format.
      */
-    private val nativePdfFormat: String = builder.nativePdfFormat
+    private val pdfUniversalAccess: Boolean = builder.pdfUniversalAccess
 
     fun all(): Map<String, String> =
         mapOf(
@@ -109,8 +109,8 @@ class PageProperties(builder: Builder) {
             "landscape" to isLandscape.toString(),
             "scale" to scale.toString(),
             "nativePageRanges" to nativePageRanges,
-            "pdfFormat" to pdfFormat,
-            "nativePdfFormat" to nativePdfFormat,
+            "pdfa" to pdfFormat.format,
+            "pdfua" to pdfUniversalAccess.toString(),
         )
 
     /**
@@ -140,9 +140,10 @@ class PageProperties(builder: Builder) {
             private set
         var nativePageRanges = ""
             private set
-        var pdfFormat = ""
+        var pdfFormat = PdfFormat.A_1A
             private set
-        val nativePdfFormat = PdfFormat.A_1A.format
+        var pdfUniversalAccess = false
+            private set
 
         /**
          * Sets the paper width for the PageProperties being constructed.
@@ -291,8 +292,16 @@ class PageProperties(builder: Builder) {
          * @param pdfFormat The PDF format.
          * @return The Builder instance for method chaining.
          */
-        fun addPdfFormat(pdfFormat: String): Builder {
+        fun addPdfFormat(pdfFormat: PdfFormat): Builder {
             this.pdfFormat = pdfFormat
+            return this
+        }
+
+        /**
+         * Sets whether PDF for Universal Access should be enabled for the PageProperties being constructed.
+         */
+        fun addPdfUniversalAccess(pdfUniversalAccess: Boolean): Builder {
+            this.pdfUniversalAccess = pdfUniversalAccess
             return this
         }
 

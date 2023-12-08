@@ -13,9 +13,9 @@ class FileValidatorTest {
     @ParameterizedTest
     @CsvSource(
         value = [
-            "src/test/resources/test.md,true",
+            "src/test/resources/markdown/test.md,true",
             "src/test/resources/missing.md,false",
-            "src/test/resources/index.html,false",
+            "src/test/resources/markdown/index.html,false",
         ],
         delimiter = ',',
     )
@@ -29,9 +29,26 @@ class FileValidatorTest {
     @ParameterizedTest
     @CsvSource(
         value = [
+            "src/test/resources/html/index.html,true",
+            "src/test/resources/html/footer.html,false",
+            "src/test/resources/missing.html,false",
+            "src/test/resources/markdown/index.html,true",
+        ],
+        delimiter = ',',
+    )
+    fun `test is index file`(
+        file: String,
+        expected: Boolean,
+    ) {
+        assertEquals(expected, FileValidator.isIndexHtml(File(file)))
+    }
+
+    @ParameterizedTest
+    @CsvSource(
+        value = [
             "src/test/resources/test.pdf,true",
             "src/test/resources/missing.pdf,false",
-            "src/test/resources/index.html,false",
+            "src/test/resources/markdown/index.html,false",
         ],
         delimiter = ',',
     )
@@ -42,15 +59,15 @@ class FileValidatorTest {
 
     @Test
     fun `test validate files contains existing index`() {
-        val fileMarkdown = File("src/test/resources/test.md")
-        val fileIndex = File("src/test/resources/index.html")
+        val fileMarkdown = File("src/test/resources/markdown/test.md")
+        val fileIndex = File("src/test/resources/markdown/index.html")
 
         assertTrue(FileValidator.containsIndex(listOf(fileMarkdown, fileIndex)))
     }
 
     @Test
     fun `test validate files contains missing index`() {
-        val fileMarkdown = File("src/test/resources/test.md")
+        val fileMarkdown = File("src/test/resources/markdown/test.md")
         val fileMissing = File("src/test/resources/missing.html")
         val fileMissingIndex = File("src/test/resources/missing/index.html")
 
@@ -71,8 +88,8 @@ class FileValidatorTest {
         fun supportedFiles() =
             arrayOf(
                 arrayOf("src/test/resources/test.pdf", true),
-                arrayOf("src/test/resources/index.html", true),
-                arrayOf("src/test/resources/test.md", false),
+                arrayOf("src/test/resources/html/index.html", true),
+                arrayOf("src/test/resources/markdown/test.md", false),
                 arrayOf("src/test/resources/missing.html", false),
                 arrayOf("src/test/kotlin/dev/marrek13/validator/FileValidatorTest.kt", false),
             )
