@@ -22,7 +22,7 @@ implementation group: 'dev.marrek13', name: 'kotenberg', version: '1.0.0'
 
 ### Gradle Kotlin DSL
 ```kotlin
-implementation("dev.marrek13:kotenberg:1.0.2")
+implementation("dev.marrek13:kotenberg:1.0.0")
 ```
 
 ## Prerequisites

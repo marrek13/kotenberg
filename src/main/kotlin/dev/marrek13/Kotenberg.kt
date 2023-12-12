@@ -180,7 +180,7 @@ class Kotenberg(endpoint: String, private val httpClient: HttpClient = HttpClien
         .ifEmpty { throw FileNotFoundException("PDF Engines route accepts only PDF files.") }
         .let {
             executeHttpPostRequest(
-                route = endpoint + pdfEnginesRoute,
+                route = pdfEnginesRoute,
                 pageProperties = pageProperties,
                 files = it,
             )
