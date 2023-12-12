@@ -114,25 +114,25 @@ Additionally, you can also use `merge` method to alphabetically merge the PDF fi
 val pdf1 = File("path/to/first.pdf")
 val pdf2 = File("path/to/second.pdf")
 
-val response = client.merge(listOf(pdf1, pdf2), pageProperties);
+val response = client.merge(listOf(pdf1, pdf2), pageProperties)
 ```
 ## Example
 
 The following is a short snippet of how to use the library.
 
 ```kotlin
-import pl.semantic.Kotenberg;
-import pl.semantic.PageProperties;
-import org.apache.commons.io.FileUtils;
+import dev.marrek13.kotenberg.Kotenberg
+import dev.marrek13.kotenberg.PageProperties
+import org.apache.commons.io.FileUtils
 
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.nio.file.Files
+import java.nio.file.Paths
 
 class Main {
     fun main() {
         val client = Kotenberg("http://localhost:80/")
         try {
-            val url = "https://gotenberg.dev/";
+            val url = "https://gotenberg.dev/"
             val properties = PageProperties.Builder()
                     .addMarginTop(1.0f)
                     .addMarginLeft(0.5f)
@@ -140,14 +140,14 @@ class Main {
                     .addMarginTop(0.5f)
                     .addPrintBackground(true)
                     .build()
-            val response = client.convert(url, properties)
+            val response = client.convertUrl(url, properties)
             val projectDir = Paths.get("").toAbsolutePath().normalize()
             val tempDir = Files.createTempDirectory(projectDir, "temp_")
             val tempFile = Files.createTempFile(tempDir, "PDF_", ".pdf").toFile()
             val pdfContent = response.entity.content
             FileUtils.copyInputStreamToFile(pdfContent, tempFile)
         } catch (e: Exception) {
-            throw new RuntimeException(e);
+            throw RuntimeException(e)
         }
     }
 }
