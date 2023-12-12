@@ -1,17 +1,46 @@
-name: publish
 on:
   release:
-    types: [created]
+    types:
+      - published
+
 jobs:
-  publish:
+  release_artifacts:
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-java@v4
+      - uses: actions/checkout@8ade135a41bc03ea155e62e844d188df1ea18608
         with:
-          distribution: temurin
+          fetch-depth: 0
+
+      - name: "Set artifact version"
+        run: |
+          release_number=$(echo $GITHUB_REF | cut -d / -f 3)
+          echo Artifact version: ${release_number}
+          echo "version=${release_number}" > gradle.properties
+
+      - name: Install Java
+        uses: actions/setup-java@0ab4596768b603586c0de567f2430c30f5b0d2b0
+        with:
           java-version: 17
-          cache: gradle
-      - uses: gradle/gradle-build-action@v2
+          distribution: 'temurin'
+
+      - name: Publish Java artifact
+        id: build_jar
+        uses: gradle/gradle-build-action@842c587ad8aa4c68eeba24c396e15af4c2e9f30a
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          arguments: publish -Pgithub_actor=${{ secrets.GITHUB_ACTOR }} -Pgithub_token=${{ secrets.GITHUB_TOKEN }} -PossrhUsername=${{secrets.OSSRH_USERNAME}} -PossrhPassword=${{secrets.OSSRH_PASSWORD}}
+          arguments: clean publish
+          cache-read-only: false
+
+  otel-export-trace:
+    name: OpenTelemetry Export Trace
+    runs-on: ubuntu-latest
+    needs: release_artifacts
+    steps:
+      - name: Export Workflow Trace
+        uses: inception-health/otel-export-trace-action@7eabc7de1f4753f0b45051b44bb0ba46d05a21ef
+        with:
+          otlpEndpoint: grpc://api.honeycomb.io:443/
+          otlpHeaders: x-honeycomb-team=${{ secrets.CATALOG_PLATFORM_BUILD_EVENTS_KEY }},x-honeycomb-dataset=catalog_platform_build_events
+          githubToken: ${{ secrets.GITHUB_TOKEN }}
