@@ -5,23 +5,20 @@
 A Kotlin library that interacts with [Gotenberg](https://gotenberg.dev/)'s different modules to convert a variety of document formats to PDF files.
 
 ## Snippets
-To incorporate `kotenberg` into your project, follow the snippets below for Apache Maven and Gradle dependencies.
-### Apache Maven
-```xml
-<dependency>
-    <groupId>dev.marrek13</groupId>
-    <artifactId>kotenberg</artifactId>
-    <version>1.0.0</version>
-</dependency>
-```
-
-### Gradle
-```groovy
-implementation group: 'dev.marrek13', name: 'kotenberg', version: '1.0.0'
-```
+To incorporate `kotenberg` into your project, follow the snippets below for Gradle dependencies.
 
 ### Gradle Kotlin DSL
 ```kotlin
+repositories {
+    maven {
+        url = uri("https://maven.pkg.github.com/marrek13/kotenberg")
+        credentials {
+            username = project.findProperty("gpr.user") ?: System.getenv("GITHUB_USERNAMe")
+            password = project.findProperty("gpr.key") ?: System.getenv("GITHUB_TOKEN")
+        }
+    }
+}
+
 implementation("dev.marrek13:kotenberg:1.0.0")
 ```
 
