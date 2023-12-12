@@ -6,6 +6,8 @@ on:
 jobs:
   release_artifacts:
     runs-on: ubuntu-latest
+    permissions:
+      packages: write
 
     steps:
       - uses: actions/checkout@8ade135a41bc03ea155e62e844d188df1ea18608
@@ -28,6 +30,7 @@ jobs:
         id: build_jar
         uses: gradle/gradle-build-action@842c587ad8aa4c68eeba24c396e15af4c2e9f30a
         env:
+          GITHUB_ACTOR: ${{ github.actor }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           arguments: clean publish
