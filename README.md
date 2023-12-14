@@ -77,13 +77,13 @@ val response = client.convertMarkdown(listOf(index, markdown), pageProperties);
 
 ### Customization
 
-`Kotenberg` client comes with `PageProperties` which is a builder class that allows you to customize the style of the generated PDF. The default page properties can be found [here](https://gotenberg.dev/docs/modules/chromium#routes).
+`Kotenberg` client comes with `PageProperties` which is a builder class that allows you to customize the style of the generated PDF. The default page properties can be found [here](https://gotenberg.dev/docs/routes#page-properties-chromium).
 
 ```kotlin
 val pageProperties = PageProperties.Builder().build()
 ```
 ### LibreOffice
-`Kotenberg` client provides a `convertWithLibreOffice` method which interacts with [LibreOffice](https://gotenberg.dev/docs/modules/libreoffice) to convert different types of documents such as `.docx`, `.epub`, `.eps`, and so on. You can find the list of all file extensions [here](https://gotenberg.dev/docs/modules/libreoffice#route).
+`Kotenberg` client provides a `convertWithLibreOffice` method which interacts with [LibreOffice](https://gotenberg.dev/docs/routes#convert-with-libreoffice) to convert different types of documents such as `.docx`, `.epub`, `.eps`, and so on. You can find the list of all file extensions [here](https://gotenberg.dev/docs/routes#office-documents-into-pdfs-route).
 
 ```kotlin
 val docx = File("path/to/file.docx")
@@ -93,7 +93,7 @@ val response = client.convertWithLibreOffice(listOf(docx, xlsx), pageProperties)
 ```
 
 ### PDF Engines
-Similarly, `Kotenberg` client provides a `convertWithPdfEngines` method which interacts with [PDF Engines](https://gotenberg.dev/docs/modules/pdf-engines) to convert PDF files to a specific format (i.e. `PDF/A-1a`, `PDF/A-2b`, `PDF/A-3b`)).
+Similarly, `Kotenberg` client provides a `convertWithPdfEngines` method which interacts with [PDF Engines](https://gotenberg.dev/docs/routes#office-documents-into-pdfs-route) to convert PDF files to a specific format (i.e. `PDF/A-1a`, `PDF/A-2b`, `PDF/A-3b`)).
 
 The supported formats can be found in `PdfFormat`.
 
