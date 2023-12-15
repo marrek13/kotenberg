@@ -19,7 +19,9 @@ repositories {
     }
 }
 
-implementation("dev.marrek13:kotenberg:1.0.0")
+dependencies {
+    implementation("dev.marrek13:kotenberg:1.0.0")
+}
 ```
 
 ## Prerequisites
