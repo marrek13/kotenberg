@@ -63,18 +63,18 @@ The only requirement is that one of the files name should be `index.html`.
 ```kotlin
 val index = File("path/to/index.html")
 val header = File("path/to/header.html")
-val response = client.convertHtml(listOf(index, header), pageProperties);
+val response = client.convertHtml(listOf(index, header), pageProperties)
 ```
 
 #### Markdown
 
-This route accepts an `index.html` file plus markdown files.
+This route accepts an `index.html` file plus markdown files. Check [Gotenberg docs](https://gotenberg.dev/docs/routes#markdown-files-into-pdf-route) for details.
 
 ```kotlin
 val index = File("path/to/index.html")
 val markdown = File("path/to/markdown.md")
 
-val response = client.convertMarkdown(listOf(index, markdown), pageProperties);
+val response = client.convertMarkdown(listOf(index, markdown), pageProperties)
 ```
 
 ### Customization
@@ -91,7 +91,7 @@ val pageProperties = PageProperties.Builder().build()
 val docx = File("path/to/file.docx")
 val xlsx = File("path/to/file.xlsx")
 
-val response = client.convertWithLibreOffice(listOf(docx, xlsx), pageProperties);
+val response = client.convertWithLibreOffice(listOf(docx, xlsx), pageProperties)
 ```
 
 ### PDF Engines
@@ -107,16 +107,16 @@ val pageProperties = PageProperties.Builder()
     .addPdfFormat(PdfFormat.A_3B.format())
     .build()
 
-val response = client.convertWithPdfEngines(listOf(pdf1, pdf2), pageProperties);
+val response = client.convertWithPdfEngines(listOf(pdf1, pdf2), pageProperties)
 ```
 
-Additionally, you can also use `merge` method to alphabetically merge the PDF files.
+Additionally, you can also use `mergeWithPdfEngines` method to [alphabetically](https://gotenberg.dev/docs/routes#merge-pdfs-route) merge the PDF files.
 
 ```kotlin
 val pdf1 = File("path/to/first.pdf")
 val pdf2 = File("path/to/second.pdf")
 
-val response = client.merge(listOf(pdf1, pdf2), pageProperties)
+val response = client.mergeWithPdfEngines(listOf(pdf1, pdf2), pageProperties)
 ```
 ## Example
 
