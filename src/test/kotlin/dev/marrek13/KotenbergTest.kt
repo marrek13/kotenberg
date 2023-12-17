@@ -34,7 +34,7 @@ class KotenbergTest {
             val kotenberg = Kotenberg(gotenbergTestContainer.endpoint)
 
             val result =
-                kotenberg.convertUrl(gotenbergTestContainer.endpoint + "/health", PageProperties.Builder().build())
+                kotenberg.convertUrl(gotenbergTestContainer.endpoint + "/health")
 
             assertEquals(200, result.status.value)
             assertEquals("application/pdf", result.headers[HttpHeaders.ContentType])
@@ -51,7 +51,6 @@ class KotenbergTest {
                         File("src/test/resources/html/header.html"),
                         File("src/test/resources/html/footer.html"),
                     ),
-                    PageProperties.Builder().build(),
                 )
             }
         }
@@ -69,7 +68,6 @@ class KotenbergTest {
                         File("src/test/resources/html/footer.html"),
                         File("src/test/resources/html/image.jpg"),
                     ),
-                    PageProperties.Builder().build(),
                 )
 
             assertEquals(200, result.status.value)
@@ -87,7 +85,6 @@ class KotenbergTest {
                         File("src/test/resources/markdown/index.html"),
                         File("src/test/resources/markdown/test.md"),
                     ),
-                    PageProperties.Builder().build(),
                 )
 
             assertEquals(200, result.status.value)
@@ -104,7 +101,6 @@ class KotenbergTest {
                     listOf(
                         File("src/test/resources/libreoffice/test.docx"),
                     ),
-                    PageProperties.Builder().build(),
                 )
 
             assertEquals(200, result.status.value)
@@ -121,7 +117,6 @@ class KotenbergTest {
                     listOf(
                         File("src/test/resources/libreoffice/test.xlsx"),
                     ),
-                    PageProperties.Builder().build(),
                 )
 
             assertEquals(200, result.status.value)
@@ -139,7 +134,6 @@ class KotenbergTest {
                         File("src/test/resources/libreoffice/test.docx"),
                         File("src/test/resources/libreoffice/test.xlsx"),
                     ),
-                    PageProperties.Builder().build(),
                 )
 
             assertEquals(200, result.status.value)
