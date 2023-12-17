@@ -35,15 +35,3 @@ jobs:
         with:
           arguments: clean publish
           cache-read-only: false
-
-  otel-export-trace:
-    name: OpenTelemetry Export Trace
-    runs-on: ubuntu-latest
-    needs: release_artifacts
-    steps:
-      - name: Export Workflow Trace
-        uses: inception-health/otel-export-trace-action@7eabc7de1f4753f0b45051b44bb0ba46d05a21ef
-        with:
-          otlpEndpoint: grpc://api.honeycomb.io:443/
-          otlpHeaders: x-honeycomb-team=${{ secrets.CATALOG_PLATFORM_BUILD_EVENTS_KEY }},x-honeycomb-dataset=catalog_platform_build_events
-          githubToken: ${{ secrets.GITHUB_TOKEN }}
