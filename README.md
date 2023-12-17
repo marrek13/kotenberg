@@ -13,8 +13,8 @@ repositories {
     maven {
         url = uri("https://maven.pkg.github.com/marrek13/kotenberg")
         credentials {
-            username = project.findProperty("gpr.user") ?: System.getenv("GITHUB_USERNAMe")
-            password = project.findProperty("gpr.key") ?: System.getenv("GITHUB_TOKEN")
+            username = project.findProperty("gpr.user")?.toString() ?: System.getenv("GITHUB_USERNAME")
+            password = project.findProperty("gpr.key")?.toString() ?: System.getenv("GITHUB_TOKEN")
         }
     }
 }
