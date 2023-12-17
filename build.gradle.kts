@@ -5,7 +5,6 @@ plugins {
 }
 
 group = "dev.marrek13"
-version = "1.0.0"
 
 dependencies {
     api(libs.ktor.client.core)
