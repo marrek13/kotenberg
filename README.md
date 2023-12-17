@@ -146,7 +146,7 @@ class Main {
             val projectDir = Paths.get("").toAbsolutePath().normalize()
             val tempDir = Files.createTempDirectory(projectDir, "temp_")
             val tempFile = Files.createTempFile(tempDir, "PDF_", ".pdf").toFile()
-            val pdfContent = response.entity.content
+            val pdfContent = response.body<ByteArray>()
             FileUtils.copyInputStreamToFile(pdfContent, tempFile)
         } catch (e: Exception) {
             throw RuntimeException(e)
