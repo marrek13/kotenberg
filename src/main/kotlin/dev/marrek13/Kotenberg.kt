@@ -44,7 +44,7 @@ class Kotenberg(endpoint: String, private val httpClient: HttpClient = HttpClien
      */
     suspend fun convertUrl(
         url: String,
-        pageProperties: PageProperties,
+        pageProperties: PageProperties = PageProperties.Builder().build(),
     ): HttpResponse {
         if (!UrlValidator.isValidURL(url)) {
             throw MalformedURLException()
@@ -66,7 +66,7 @@ class Kotenberg(endpoint: String, private val httpClient: HttpClient = HttpClien
      */
     suspend fun convertHtml(
         files: List<File>,
-        pageProperties: PageProperties,
+        pageProperties: PageProperties = PageProperties.Builder().build(),
     ): HttpResponse =
         files
             .ifEmpty { throw EmptyFileListException() }
@@ -89,7 +89,7 @@ class Kotenberg(endpoint: String, private val httpClient: HttpClient = HttpClien
      */
     suspend fun convertMarkdown(
         files: List<File>,
-        pageProperties: PageProperties,
+        pageProperties: PageProperties = PageProperties.Builder().build(),
     ): HttpResponse =
         files
             .ifEmpty { throw EmptyFileListException() }
@@ -115,7 +115,7 @@ class Kotenberg(endpoint: String, private val httpClient: HttpClient = HttpClien
      */
     suspend fun convertWithLibreOffice(
         files: List<File>,
-        pageProperties: PageProperties,
+        pageProperties: PageProperties = PageProperties.Builder().build(),
     ): HttpResponse =
         files
             .ifEmpty { throw EmptyFileListException() }
@@ -139,7 +139,7 @@ class Kotenberg(endpoint: String, private val httpClient: HttpClient = HttpClien
      */
     suspend fun convertWithPdfEngines(
         files: List<File>,
-        pageProperties: PageProperties,
+        pageProperties: PageProperties = PageProperties.Builder().build(),
     ): HttpResponse = getPdfEnginesHttpResponse(files, pageProperties, PDF_ENGINES_CONVERT_ROUTE)
 
     /**
@@ -152,7 +152,7 @@ class Kotenberg(endpoint: String, private val httpClient: HttpClient = HttpClien
      */
     suspend fun mergeWithPdfEngines(
         files: List<File>,
-        pageProperties: PageProperties,
+        pageProperties: PageProperties = PageProperties.Builder().build(),
     ): HttpResponse =
         getPdfEnginesHttpResponse(
             files = files,
