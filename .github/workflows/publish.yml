@@ -10,7 +10,7 @@ jobs:
       packages: write
 
     steps:
-      - uses: actions/checkout@8ade135a41bc03ea155e62e844d188df1ea18608
+      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11
         with:
           fetch-depth: 0
 
@@ -21,14 +21,14 @@ jobs:
           echo "version=${release_number}" > gradle.properties
 
       - name: Install Java
-        uses: actions/setup-java@3232623d9c428cc5f228a01a2ae8d2d70f79775e
+        uses: actions/setup-java@387ac29b308b003ca37ba93a6cab5eb57c8f5f93
         with:
           java-version: 17
           distribution: 'temurin'
 
       - name: Publish Java artifact
         id: build_jar
-        uses: gradle/gradle-build-action@a8f75513eafdebd8141bd1cd4e30fcd194af8dfa
+        uses: gradle/actions/setup-gradle@ec92e829475ac0c2315ea8f9eced72db85bb337a
         env:
           GITHUB_ACTOR: ${{ github.actor }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
