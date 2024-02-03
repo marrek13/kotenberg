@@ -140,7 +140,7 @@ class PageProperties(builder: Builder) {
             private set
         var nativePageRanges = ""
             private set
-        var pdfFormat = PdfFormat.A_1A
+        var pdfFormat = PdfFormat.A_2B
             private set
         var pdfUniversalAccess = false
             private set

@@ -9,12 +9,13 @@ enum class PdfFormat(val format: String) {
     /**
      * PDF/A-1a format.
      */
+    @Deprecated("Deprecated in Gotenberg 8.x, see https://gotenberg.dev/docs/troubleshooting#pdfa-1a")
+    @Suppress("unused")
     A_1A("PDF/A-1a"),
 
     /**
      * PDF/A-2b format.
      */
-    @Suppress("unused")
     A_2B("PDF/A-2b"),
 
     /**
