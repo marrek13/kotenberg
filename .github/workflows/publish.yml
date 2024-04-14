@@ -28,7 +28,7 @@ jobs:
 
       - name: Publish Java artifact
         id: build_jar
-        uses: gradle/actions/setup-gradle@9e899d11ad247ec76be7a60bc1cf9d3abbb9e7f1
+        uses: gradle/actions/setup-gradle@3c2d3b6f2aefba2b7a1a9fbd506125c8f8b4fdc4
         env:
           GITHUB_ACTOR: ${{ github.actor }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
