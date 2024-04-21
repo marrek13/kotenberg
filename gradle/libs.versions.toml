@@ -4,7 +4,7 @@ spotless = "6.25.0"
 commonsIo = "2.15.1"
 junit = "5.10.2"
 coroutines = "1.8.0"
-ktor="2.3.9"
+ktor="2.3.10"
 testContainers="1.19.7"
 
 [libraries]
