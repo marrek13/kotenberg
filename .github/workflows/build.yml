@@ -16,6 +16,6 @@ jobs:
           distribution: 'temurin'
 
       - name: Build and run tests
-        uses: gradle/actions/setup-gradle@v3.3.1
+        uses: gradle/actions/setup-gradle@v3.3.2
         with:
           arguments: build
