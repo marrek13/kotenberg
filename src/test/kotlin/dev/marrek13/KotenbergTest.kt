@@ -6,7 +6,7 @@ import dev.marrek13.exception.EmptyFileListException
 import dev.marrek13.exception.IndexFileNotFoundExceptions
 import io.ktor.client.statement.bodyAsChannel
 import io.ktor.http.HttpHeaders
-import io.ktor.util.toByteArray
+import io.ktor.utils.io.toByteArray
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
