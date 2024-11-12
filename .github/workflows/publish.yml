@@ -25,13 +25,8 @@ jobs:
         with:
           java-version: 17
           distribution: 'temurin'
+          cache: gradle
 
       - name: Publish Java artifact
         id: build_jar
-        uses: gradle/actions/setup-gradle@db19848a5fa7950289d3668fb053140cf3028d43
-        env:
-          GITHUB_ACTOR: ${{ github.actor }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          arguments: clean publish
-          cache-read-only: false
+        run: ./gradlew clean publish

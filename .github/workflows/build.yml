@@ -14,8 +14,7 @@ jobs:
         with:
           java-version: 17
           distribution: 'temurin'
+          cache: gradle
 
-      - name: Build and run tests
-        uses: gradle/actions/setup-gradle@v3.3.2
-        with:
-          arguments: build
+      - name: Run tests & build
+        run: ./gradlew clean build
