@@ -27,11 +27,4 @@ jobs:
           distribution: 'temurin'
 
       - name: Publish Java artifact
-        id: build_jar
-        uses: gradle/actions/setup-gradle@0d30c9111cf47a838eb69c06d13f3f51ab2ed76f
-        env:
-          GITHUB_ACTOR: ${{ github.actor }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          arguments: clean publish
-          cache-read-only: false
+        run: ./gradlew clean publish
