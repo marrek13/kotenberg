@@ -1,7 +1,7 @@
 [versions]
 kotlin = "2.0.21"
 spotless = "6.25.0"
-commonsIo = "2.16.1"
+commonsIo = "2.17.0"
 junit = "5.11.3"
 coroutines = "1.9.0"
 ktor="2.3.12"
