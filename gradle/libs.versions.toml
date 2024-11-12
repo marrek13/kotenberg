@@ -5,7 +5,7 @@ commonsIo = "2.16.1"
 junit = "5.11.3"
 coroutines = "1.8.1"
 ktor="2.3.12"
-testContainers="1.20.1"
+testContainers="1.20.3"
 
 [libraries]
 # Ktor
