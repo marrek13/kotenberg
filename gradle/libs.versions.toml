@@ -3,7 +3,7 @@ kotlin = "2.0.21"
 spotless = "6.25.0"
 commonsIo = "2.16.1"
 junit = "5.11.3"
-coroutines = "1.8.1"
+coroutines = "1.9.0"
 ktor="2.3.12"
 testContainers="1.20.3"
 
