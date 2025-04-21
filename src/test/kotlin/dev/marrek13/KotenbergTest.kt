@@ -33,8 +33,7 @@ class KotenbergTest {
         runTest {
             val kotenberg = Kotenberg(gotenbergTestContainer.endpoint)
 
-            val result =
-                kotenberg.convertUrl(gotenbergTestContainer.endpoint + "/health")
+            val result = kotenberg.convertUrl("http://localhost:3000")
 
             assertEquals(200, result.status.value)
             assertEquals("application/pdf", result.headers[HttpHeaders.ContentType])
