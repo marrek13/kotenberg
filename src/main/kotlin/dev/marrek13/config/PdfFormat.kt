@@ -5,7 +5,9 @@ package dev.marrek13.config
  *
  * @param format The PDF format string.
  */
-enum class PdfFormat(val format: String) {
+enum class PdfFormat(
+    val format: String,
+) {
     /**
      * PDF/A-1a format.
      */

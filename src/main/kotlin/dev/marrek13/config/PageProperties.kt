@@ -4,7 +4,9 @@ package dev.marrek13.config
  * PageProperties is a class that represents various properties for configuring document conversion,
  * such as paper size, margins, and other formatting options.
  */
-class PageProperties(builder: Builder) {
+class PageProperties(
+    builder: Builder,
+) {
     /**
      * Returns the width of the paper.
      *

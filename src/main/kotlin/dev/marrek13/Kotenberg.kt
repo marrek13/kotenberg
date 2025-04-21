@@ -25,7 +25,10 @@ import java.net.MalformedURLException
  * @throws MalformedURLException If the provided endpoint URL is not a valid URL.
  */
 @Suppress("unused")
-class Kotenberg(endpoint: String, private val httpClient: HttpClient = HttpClient(CIO)) : AutoCloseable {
+class Kotenberg(
+    endpoint: String,
+    private val httpClient: HttpClient = HttpClient(CIO),
+) : AutoCloseable {
     init {
         if (!UrlValidator.isValidURL(endpoint)) {
             throw MalformedURLException()
