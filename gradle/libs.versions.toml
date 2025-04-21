@@ -15,9 +15,9 @@ ktor_client_cio = { module = "io.ktor:ktor-client-cio-jvm", version.ref = "ktor"
 commons_io = { module = "commons-io:commons-io", version.ref = "commonsIo" }
 
 # Tests
-junit_jupiter_api = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "junit" }
-junit_jupiter_engine = { module = "org.junit.jupiter:junit-jupiter-engine", version.ref = "junit" }
+junit_jupiter_core = { module = "org.junit.jupiter:junit-jupiter", version.ref = "junit" }
 junit_jupiter_params = { module = "org.junit.jupiter:junit-jupiter-params", version.ref = "junit" }
+junit_platform_launcher = { module = "org.junit.platform:junit-platform-launcher" }
 kotlinx_coroutines_test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "coroutines" }
 testcontainers_jupiter = { module = "org.testcontainers:junit-jupiter", version.ref = "testContainers" }
 

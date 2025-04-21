@@ -12,9 +12,9 @@ dependencies {
 
     implementation(libs.commons.io)
 
-    testImplementation(libs.junit.jupiter.api)
+    testImplementation(libs.junit.jupiter.core)
     testImplementation(libs.junit.jupiter.params)
-    testRuntimeOnly(libs.junit.jupiter.engine)
+    testRuntimeOnly(libs.junit.platform.launcher)
     testImplementation(libs.kotlinx.coroutines.test)
     testImplementation(libs.testcontainers.jupiter)
 }

@@ -87,11 +87,11 @@ class FileValidatorTest {
         @JvmStatic
         fun supportedFiles() =
             arrayOf(
-                arrayOf("src/test/resources/test.pdf", true),
-                arrayOf("src/test/resources/html/index.html", true),
-                arrayOf("src/test/resources/markdown/test.md", false),
-                arrayOf("src/test/resources/missing.html", false),
-                arrayOf("src/test/kotlin/dev/marrek13/validator/FileValidatorTest.kt", false),
+                arrayOf<Any>("src/test/resources/test.pdf", true),
+                arrayOf<Any>("src/test/resources/html/index.html", true),
+                arrayOf<Any>("src/test/resources/markdown/test.md", false),
+                arrayOf<Any>("src/test/resources/missing.html", false),
+                arrayOf<Any>("src/test/kotlin/dev/marrek13/validator/FileValidatorTest.kt", false),
             )
     }
 }
