@@ -34,7 +34,7 @@ class KotenbergTest {
             val kotenberg = Kotenberg(gotenbergTestContainer.endpoint)
 
             val result =
-                kotenberg.convertUrl(gotenbergTestContainer.endpoint + "/health")
+                kotenberg.convertUrl("https://github.com")
 
             assertEquals(200, result.status.value)
             assertEquals("application/pdf", result.headers[HttpHeaders.ContentType])
