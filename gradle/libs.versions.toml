@@ -2,7 +2,7 @@
 kotlin = "2.1.20"
 spotless = "7.0.3"
 commonsIo = "2.19.0"
-junit = "5.11.3"
+junit = "5.12.2"
 coroutines = "1.10.2"
 ktor="3.1.2"
 testContainers="1.20.6"
