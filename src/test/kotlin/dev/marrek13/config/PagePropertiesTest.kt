@@ -33,10 +33,18 @@ class PagePropertiesTest {
 
     @Test
     fun `should validate minimal margin`() {
-        assertThrows<IllegalArgumentException> { PageProperties.Builder().addMarginBottom(MINIMAL_MARGIN) }
-        assertThrows<IllegalArgumentException> { PageProperties.Builder().addMarginTop(MINIMAL_MARGIN) }
-        assertThrows<IllegalArgumentException> { PageProperties.Builder().addMarginRight(MINIMAL_MARGIN) }
-        assertThrows<IllegalArgumentException> { PageProperties.Builder().addMarginLeft(MINIMAL_MARGIN) }
+        assertThrows<IllegalArgumentException> {
+            PageProperties.Builder().addMarginBottom(MINIMAL_MARGIN)
+        }
+        assertThrows<IllegalArgumentException> {
+            PageProperties.Builder().addMarginTop(MINIMAL_MARGIN)
+        }
+        assertThrows<IllegalArgumentException> {
+            PageProperties.Builder().addMarginRight(MINIMAL_MARGIN)
+        }
+        assertThrows<IllegalArgumentException> {
+            PageProperties.Builder().addMarginLeft(MINIMAL_MARGIN)
+        }
     }
 
     @Test

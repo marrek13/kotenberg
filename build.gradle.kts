@@ -1,6 +1,6 @@
 plugins {
     alias(libs.plugins.kotlin.jvm)
-    alias(libs.plugins.spotless)
+    alias(libs.plugins.ktfmt)
     id("maven-publish")
 }
 
@@ -29,17 +29,8 @@ repositories {
     mavenCentral()
 }
 
-spotless {
-    kotlin {
-        target("**/*.kt")
-        targetExclude("${layout.buildDirectory.asFile.get()}/**/*.kt")
-        ktlint()
-    }
-
-    kotlinGradle {
-        target("*.gradle.kts")
-        ktlint()
-    }
+ktfmt {
+    kotlinLangStyle()
 }
 
 publishing {

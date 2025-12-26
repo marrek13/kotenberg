@@ -1,7 +1,7 @@
 package dev.marrek13.validator
 
-import org.apache.commons.io.FilenameUtils
 import java.io.File
+import org.apache.commons.io.FilenameUtils
 
 object FileValidator {
     private const val INDEX_HTML = "index.html"
@@ -93,7 +93,8 @@ object FileValidator {
      * @param file The file to check.
      * @return `true` if the file has a supported extension, `false` otherwise.
      */
-    fun isSupportedByLibreOffice(file: File) = file.isFile() && extensions.contains(FilenameUtils.getExtension(file.getName()))
+    fun isSupportedByLibreOffice(file: File) =
+        file.isFile() && extensions.contains(FilenameUtils.getExtension(file.getName()))
 
     /**
      * Checks if a file is an index HTML file (name: index.html).
@@ -119,10 +120,8 @@ object FileValidator {
      */
     fun isPdf(file: File) = hasExtension(file, EXTENSION_PDF)
 
-    private fun hasExtension(
-        file: File,
-        extension: String,
-    ) = file.isFile() && FilenameUtils.getExtension(file.getName()) == extension
+    private fun hasExtension(file: File, extension: String) =
+        file.isFile() && FilenameUtils.getExtension(file.getName()) == extension
 
     /**
      * Checks if a list of files contains an index HTML file.

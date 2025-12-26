@@ -18,17 +18,15 @@ import java.io.IOException
 import java.net.MalformedURLException
 
 /**
- * Kotenberg is a class that provides functionality for interacting with the Gotenberg API
- * to convert and process various types of documents.
+ * Kotenberg is a class that provides functionality for interacting with the Gotenberg API to
+ * convert and process various types of documents.
  *
  * @param endpoint The URL of the Gotenberg API endpoint.
  * @throws MalformedURLException If the provided endpoint URL is not a valid URL.
  */
 @Suppress("unused")
-class Kotenberg(
-    endpoint: String,
-    private val httpClient: HttpClient = HttpClient(CIO),
-) : AutoCloseable {
+class Kotenberg(endpoint: String, private val httpClient: HttpClient = HttpClient(CIO)) :
+    AutoCloseable {
     init {
         if (!UrlValidator.isValidURL(endpoint)) {
             throw MalformedURLException()
@@ -40,7 +38,7 @@ class Kotenberg(
     /**
      * Converts a document from a URL using the Chromium HTML conversion route.
      *
-     * @param url            The URL of the document to convert.
+     * @param url The URL of the document to convert.
      * @param pageProperties Page properties for the conversion.
      * @return A HttpResponse containing the result of the conversion.
      * @throws IOException If an I/O error occurs during the conversion process.
@@ -62,7 +60,7 @@ class Kotenberg(
     /**
      * Converts a document from a local file using the Chromium HTML conversion route.
      *
-     * @param files          The list of files to convert.
+     * @param files The list of files to convert.
      * @param pageProperties Page properties for the conversion.
      * @return A HttpResponse containing the result of the conversion.
      * @throws IOException If an I/O error occurs during the conversion process.
@@ -85,7 +83,7 @@ class Kotenberg(
     /**
      * Converts a list of Markdown files using the Chromium Markdown conversion route.
      *
-     * @param files          The list of files to convert.
+     * @param files The list of files to convert.
      * @param pageProperties Page properties for the conversion.
      * @return A HttpResponse containing the result of the conversion.
      * @throws IOException If an I/O error occurs during the conversion process.
@@ -98,7 +96,11 @@ class Kotenberg(
             .ifEmpty { throw EmptyFileListException() }
             .also { if (!FileValidator.containsIndex(it)) throw IndexFileNotFoundExceptions() }
             .filter { FileValidator.isMarkdown(it) || FileValidator.isIndexHtml(it) }
-            .ifEmpty { throw FileNotFoundException("Chromium's markdown route accepts a single index.html and markdown files.") }
+            .ifEmpty {
+                throw FileNotFoundException(
+                    "Chromium's markdown route accepts a single index.html and markdown files."
+                )
+            }
             .let {
                 executeHttpPostRequest(
                     route = CHROMIUM_MARKDOWN_ROUTE,
@@ -108,10 +110,10 @@ class Kotenberg(
             }
 
     /**
-     * Converts a list of files using LibreOffice.
-     * Please refer to https://gotenberg.dev/docs/modules/libreoffice for more details.
+     * Converts a list of files using LibreOffice. Please refer to
+     * https://gotenberg.dev/docs/modules/libreoffice for more details.
      *
-     * @param files          The list of files to convert.
+     * @param files The list of files to convert.
      * @param pageProperties Page properties for the conversion.
      * @return A HttpResponse containing the result of the conversion.
      * @throws IOException If an I/O error occurs during the conversion process.
@@ -123,7 +125,9 @@ class Kotenberg(
         files
             .ifEmpty { throw EmptyFileListException() }
             .filter(FileValidator::isSupportedByLibreOffice)
-            .ifEmpty { throw FileNotFoundException(LIBRE_OFFICE_UNSUPPORTED_FILE_ERROR.trimIndent()) }
+            .ifEmpty {
+                throw FileNotFoundException(LIBRE_OFFICE_UNSUPPORTED_FILE_ERROR.trimIndent())
+            }
             .let {
                 executeHttpPostRequest(
                     route = LIBRE_OFFICE_ROUTE,
@@ -135,7 +139,7 @@ class Kotenberg(
     /**
      * Converts a list of documents using PDF Engines.
      *
-     * @param files          The list of files to convert.
+     * @param files The list of files to convert.
      * @param pageProperties Page properties for the conversion.
      * @return A HttpResponse containing the result of the conversion.
      * @throws IOException If an I/O error occurs during the conversion process.
@@ -148,7 +152,7 @@ class Kotenberg(
     /**
      * Merges a list of PDF documents using PDF Engines.
      *
-     * @param files          The list of PDF files to merge.
+     * @param files The list of PDF files to merge.
      * @param pageProperties Page properties for the merge operation.
      * @return A HttpResponse containing the result of the merge.
      * @throws IOException If an I/O error occurs during the merge process.
@@ -164,10 +168,10 @@ class Kotenberg(
         )
 
     /**
-     * Executes an HTTP POST request for PDF Engines operations with the provided list of files, page properties,
-     * and the specified PDF Engines route.
+     * Executes an HTTP POST request for PDF Engines operations with the provided list of files,
+     * page properties, and the specified PDF Engines route.
      *
-     * @param files          The list of files to process with PDF Engines.
+     * @param files The list of files to process with PDF Engines.
      * @param pageProperties Page properties for the PDF Engines operation.
      * @param pdfEnginesRoute The route for the PDF Engines operation (e.g., convert or merge).
      * @return A HttpResponse containing the result of the PDF Engines operation.
@@ -177,22 +181,23 @@ class Kotenberg(
         files: List<File>,
         pageProperties: PageProperties,
         pdfEnginesRoute: String,
-    ) = files
-        .ifEmpty { throw EmptyFileListException() }
-        .filter(FileValidator::isPdf)
-        .ifEmpty { throw FileNotFoundException("PDF Engines route accepts only PDF files.") }
-        .let {
-            executeHttpPostRequest(
-                route = pdfEnginesRoute,
-                pageProperties = pageProperties,
-                files = it,
-            )
-        }
+    ) =
+        files
+            .ifEmpty { throw EmptyFileListException() }
+            .filter(FileValidator::isPdf)
+            .ifEmpty { throw FileNotFoundException("PDF Engines route accepts only PDF files.") }
+            .let {
+                executeHttpPostRequest(
+                    route = pdfEnginesRoute,
+                    pageProperties = pageProperties,
+                    files = it,
+                )
+            }
 
     /**
      * Executes an HTTP POST request with the provided route and page properties.
      *
-     * @param route          The route for the POST request.
+     * @param route The route for the POST request.
      * @param pageProperties Page properties for the request.
      * @return A HttpResponse containing the response of the request.
      * @throws IOException If an I/O error occurs during the request.
@@ -202,23 +207,24 @@ class Kotenberg(
         pageProperties: PageProperties,
         parameters: Map<String, String> = emptyMap(),
         files: List<File> = emptyList(),
-    ) = httpClient.submitFormWithBinaryData(
-        url = endpoint + route,
-        formData =
-            formData {
-                pageProperties.all().forEach { (key, value) -> append(key, value) }
-                parameters.forEach { (key, value) -> append(key, value) }
-                files.forEach { file ->
-                    append(
-                        file.name,
-                        file.readBytes(),
-                        headers {
-                            append(HttpHeaders.ContentDisposition, "filename=\"${file.name}\"")
-                        },
-                    )
-                }
-            },
-    )
+    ) =
+        httpClient.submitFormWithBinaryData(
+            url = endpoint + route,
+            formData =
+                formData {
+                    pageProperties.all().forEach { (key, value) -> append(key, value) }
+                    parameters.forEach { (key, value) -> append(key, value) }
+                    files.forEach { file ->
+                        append(
+                            file.name,
+                            file.readBytes(),
+                            headers {
+                                append(HttpHeaders.ContentDisposition, "filename=\"${file.name}\"")
+                            },
+                        )
+                    }
+                },
+        )
 
     override fun close() = httpClient.close()
 
@@ -230,7 +236,8 @@ class Kotenberg(
         private const val PDF_ENGINES_CONVERT_ROUTE = "forms/pdfengines/convert"
         private const val PDF_ENGINES_MERGE_ROUTE = "forms/pdfengines/merge"
 
-        private const val LIBRE_OFFICE_UNSUPPORTED_FILE_ERROR = """
+        private const val LIBRE_OFFICE_UNSUPPORTED_FILE_ERROR =
+            """
             File extensions are not supported by Libre Office. 
             Please refer to https://gotenberg.dev/docs/modules/libreoffice for more details.
         """

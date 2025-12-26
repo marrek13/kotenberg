@@ -4,9 +4,7 @@ package dev.marrek13.config
  * PageProperties is a class that represents various properties for configuring document conversion,
  * such as paper size, margins, and other formatting options.
  */
-class PageProperties(
-    builder: Builder,
-) {
+class PageProperties(builder: Builder) {
     /**
      * Returns the width of the paper.
      *
@@ -116,34 +114,47 @@ class PageProperties(
         )
 
     /**
-     * The Builder class is used to construct instances of PageProperties with specific configuration options.
+     * The Builder class is used to construct instances of PageProperties with specific
+     * configuration options.
      */
     @Suppress("unused")
     class Builder {
         var paperWidth = 8.5f
             private set
+
         var paperHeight = 11f
             private set
+
         var marginTop = 0.39f
             private set
+
         var marginBottom = 0.39f
             private set
+
         var marginLeft = 0.39f
             private set
+
         var marginRight = 0.39f
             private set
+
         var preferCssPageSize = false
             private set
+
         var printBackground = false
             private set
+
         var landscape = false
             private set
+
         var scale = 1f
             private set
+
         var nativePageRanges = ""
             private set
+
         var pdfFormat = PdfFormat.A_2B
             private set
+
         var pdfUniversalAccess = false
             private set
 
@@ -152,7 +163,8 @@ class PageProperties(
          *
          * @param paperWidth The width of the paper.
          * @return The Builder instance for method chaining.
-         * @throws IllegalArgumentException If the specified paper width is below the minimum printing requirement.
+         * @throws IllegalArgumentException If the specified paper width is below the minimum
+         *   printing requirement.
          */
         fun addPaperWidth(paperWidth: Float): Builder {
             require(paperWidth > MINIMAL_PAPER_WIDTH) { PAPER_WIDTH_ERROR }
@@ -165,7 +177,8 @@ class PageProperties(
          *
          * @param paperHeight The height of the paper.
          * @return The Builder instance for method chaining.
-         * @throws IllegalArgumentException If the specified paper height is below the minimum printing requirement.
+         * @throws IllegalArgumentException If the specified paper height is below the minimum
+         *   printing requirement.
          */
         fun addPaperHeight(paperHeight: Float): Builder {
             require(paperHeight > MINIMAL_PAPER_HEIGHT) { PAPER_HEIGHT_ERROR }
@@ -248,7 +261,8 @@ class PageProperties(
         }
 
         /**
-         * Sets whether the document is in landscape orientation for the PageProperties being constructed.
+         * Sets whether the document is in landscape orientation for the PageProperties being
+         * constructed.
          *
          * @param landscape `true` if the document is in landscape orientation, `false` otherwise.
          * @return The Builder instance for method chaining.
@@ -273,17 +287,12 @@ class PageProperties(
          * Sets the native page ranges for the PageProperties being constructed.
          *
          * @param start The start page number.
-         * @param end   The end page number.
+         * @param end The end page number.
          * @return The Builder instance for method chaining.
          * @throws IllegalArgumentException If the page range is malformed.
          */
-        fun addNativePageRanges(
-            start: Int,
-            end: Int,
-        ): Builder {
-            require(start in 1..<end) {
-                PAGE_RANGE_ERROR
-            }
+        fun addNativePageRanges(start: Int, end: Int): Builder {
+            require(start in 1..<end) { PAGE_RANGE_ERROR }
             nativePageRanges = "$start-$end"
             return this
         }
@@ -300,7 +309,8 @@ class PageProperties(
         }
 
         /**
-         * Sets whether PDF for Universal Access should be enabled for the PageProperties being constructed.
+         * Sets whether PDF for Universal Access should be enabled for the PageProperties being
+         * constructed.
          */
         fun addPdfUniversalAccess(pdfUniversalAccess: Boolean): Builder {
             this.pdfUniversalAccess = pdfUniversalAccess

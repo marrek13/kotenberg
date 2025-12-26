@@ -1,6 +1,6 @@
 [versions]
 kotlin = "2.3.0"
-spotless = "8.1.0"
+ktfmt = "0.20.1"
 commonsIo = "2.21.0"
 junit = "6.0.1"
 coroutines = "1.10.2"
@@ -23,4 +23,4 @@ testcontainers_jupiter = { module = "org.testcontainers:junit-jupiter", version.
 
 [plugins]
 kotlin_jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
-spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }
+ktfmt = { id = "com.ncorti.ktfmt.gradle", version.ref = "ktfmt" }
