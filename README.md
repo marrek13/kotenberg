@@ -119,40 +119,39 @@ val pdf2 = File("path/to/second.pdf")
 
 val response = client.mergeWithPdfEngines(listOf(pdf1, pdf2))
 ```
-## Example
 
-The following is a short snippet of how to use the library.
+## DSL API
+
+Kotenberg provides a Kotlin DSL for more concise code:
 
 ```kotlin
-import dev.marrek13.kotenberg.Kotenberg
-import dev.marrek13.kotenberg.PageProperties
-import org.apache.commons.io.FileUtils
+// URL conversion
+val response = client.url("https://example.com") {
+    pageProperties {
+        landscape = true
+        margins(1f)
+    }
+}
 
-import java.nio.file.Files
-import java.nio.file.Paths
+// HTML conversion
+val response = client.html {
+    +"index.html"
+    +"header.html"
+    pageProperties {
+        printBackground = true
+    }
+}
 
-class Main {
-    fun main() {
-        val client = Kotenberg("http://localhost:80/")
-        try {
-            val url = "https://gotenberg.dev/"
-            val properties = PageProperties.Builder()
-                    .addMarginTop(1.0f)
-                    .addMarginLeft(0.5f)
-                    .addMarginBottom(1.0f)
-                    .addMarginTop(0.5f)
-                    .addPrintBackground(true)
-                    .build()
-            val response = client.convertUrl(url, properties)
-            val projectDir = Paths.get("").toAbsolutePath().normalize()
-            val tempDir = Files.createTempDirectory(projectDir, "temp_")
-            val tempFile = Files.createTempFile(tempDir, "PDF_", ".pdf").toFile()
-            val pdfContent = response.body<ByteArray>()
-            FileUtils.copyInputStreamToFile(pdfContent, tempFile)
-        } catch (e: Exception) {
-            throw RuntimeException(e)
-        }
+// PDF merge
+val response = client.mergePdfs {
+    files("doc1.pdf", "doc2.pdf")
+    pageProperties {
+        pdfUniversalAccess = true
     }
 }
 ```
+
+Available methods: `html {}`, `url {}`, `markdown {}`, `libreOffice {}`, `pdfEngines {}`, `mergePdfs {}`
+
+The DSL is fully backward compatible - all existing code continues to work.
 
