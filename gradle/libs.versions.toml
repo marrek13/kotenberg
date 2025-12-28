@@ -1,6 +1,6 @@
 [versions]
 kotlin = "2.3.0"
-ktfmt = "0.20.1"
+ktfmt = "0.25.0"
 commonsIo = "2.21.0"
 junit = "6.0.1"
 coroutines = "1.10.2"
