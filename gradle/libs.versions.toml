@@ -2,7 +2,7 @@
 kotlin = "2.3.0"
 ktfmt = "0.20.1"
 commonsIo = "2.21.0"
-junit = "6.0.1"
+junit = "6.0.2"
 coroutines = "1.10.2"
 ktor="3.3.3"
 testContainers="1.21.4"
