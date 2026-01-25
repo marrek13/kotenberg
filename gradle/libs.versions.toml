@@ -4,7 +4,7 @@ ktfmt = "0.20.1"
 commonsIo = "2.21.0"
 junit = "6.0.1"
 coroutines = "1.10.2"
-ktor="3.3.3"
+ktor="3.4.0"
 testContainers="1.21.4"
 
 [libraries]
