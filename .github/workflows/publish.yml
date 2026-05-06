@@ -29,3 +29,23 @@ jobs:
         run: ./gradlew publish
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_ACTOR: ${{ github.actor }}
+          MAVEN_CENTRAL_USERNAME: ${{ secrets.MAVEN_CENTRAL_USERNAME }}
+          MAVEN_CENTRAL_PASSWORD: ${{ secrets.MAVEN_CENTRAL_PASSWORD }}
+          SIGNING_KEY: ${{ secrets.SIGNING_KEY }}
+          SIGNING_PASSWORD: ${{ secrets.SIGNING_PASSWORD }}
+
+      # maven-publish uses the OSSRH “Maven-like” PUT API; Central Portal then needs this follow-up
+      # from the same runner IP. See https://central.sonatype.org/publish/publish-portal-ossrh-staging-api/
+      - name: Submit build to Central Publisher (Maven Central)
+        if: ${{ secrets.MAVEN_CENTRAL_USERNAME != '' && secrets.MAVEN_CENTRAL_PASSWORD != '' }}
+        env:
+          MAVEN_CENTRAL_USERNAME: ${{ secrets.MAVEN_CENTRAL_USERNAME }}
+          MAVEN_CENTRAL_PASSWORD: ${{ secrets.MAVEN_CENTRAL_PASSWORD }}
+        run: |
+          set -euo pipefail
+          USER_PASS="${MAVEN_CENTRAL_USERNAME}:${MAVEN_CENTRAL_PASSWORD}"
+          TOKEN=$(echo -n "$USER_PASS" | base64 -w0)
+          curl -fsS -X POST \
+            -H "Authorization: Bearer ${TOKEN}" \
+            "https://ossrh-staging-api.central.sonatype.com/manual/upload/defaultRepository/dev.marrek13?publishing_type=automatic"
