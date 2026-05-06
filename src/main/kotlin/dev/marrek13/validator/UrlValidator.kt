@@ -1,6 +1,6 @@
 package dev.marrek13.validator
 
-import java.net.URL
+import java.net.URI
 
 object UrlValidator {
     /**
@@ -11,7 +11,7 @@ object UrlValidator {
      */
     fun isValidURL(url: String): Boolean =
         try {
-            URL(url).toURI()
+            URI(url).toURL()
             true
         } catch (e: Exception) {
             false

@@ -55,13 +55,12 @@ class KotenbergDslTest {
     fun `should convert HTML files using DSL`() = runTest {
         val kotenberg = Kotenberg(gotenbergTestContainer.endpoint)
 
-        val result =
-            kotenberg.html {
-                file("src/test/resources/html/index.html")
-                file("src/test/resources/html/header.html")
-                file("src/test/resources/html/footer.html")
-                file("src/test/resources/html/image.jpg")
-            }
+        val result = kotenberg.html {
+            file("src/test/resources/html/index.html")
+            file("src/test/resources/html/header.html")
+            file("src/test/resources/html/footer.html")
+            file("src/test/resources/html/image.jpg")
+        }
 
         assertEquals(200, result.status.value)
         assertEquals("application/pdf", result.headers[HttpHeaders.ContentType])
@@ -71,13 +70,12 @@ class KotenbergDslTest {
     fun `should convert HTML files using DSL with unary plus operator`() = runTest {
         val kotenberg = Kotenberg(gotenbergTestContainer.endpoint)
 
-        val result =
-            kotenberg.html {
-                +"src/test/resources/html/index.html"
-                +"src/test/resources/html/header.html"
-                +"src/test/resources/html/footer.html"
-                +File("src/test/resources/html/image.jpg")
-            }
+        val result = kotenberg.html {
+            +"src/test/resources/html/index.html"
+            +"src/test/resources/html/header.html"
+            +"src/test/resources/html/footer.html"
+            +File("src/test/resources/html/image.jpg")
+        }
 
         assertEquals(200, result.status.value)
         assertEquals("application/pdf", result.headers[HttpHeaders.ContentType])
@@ -87,20 +85,19 @@ class KotenbergDslTest {
     fun `should convert HTML with page properties using DSL`() = runTest {
         val kotenberg = Kotenberg(gotenbergTestContainer.endpoint)
 
-        val result =
-            kotenberg.html {
-                files(
-                    "src/test/resources/html/index.html",
-                    "src/test/resources/html/header.html",
-                    "src/test/resources/html/footer.html",
-                )
-                pageProperties {
-                    landscape = true
-                    margins(0.5f)
-                    scale = 1.2f
-                    printBackground = true
-                }
+        val result = kotenberg.html {
+            files(
+                "src/test/resources/html/index.html",
+                "src/test/resources/html/header.html",
+                "src/test/resources/html/footer.html",
+            )
+            pageProperties {
+                landscape = true
+                margins(0.5f)
+                scale = 1.2f
+                printBackground = true
             }
+        }
 
         assertEquals(200, result.status.value)
         assertEquals("application/pdf", result.headers[HttpHeaders.ContentType])
@@ -110,11 +107,10 @@ class KotenbergDslTest {
     fun `should convert Markdown files using DSL`() = runTest {
         val kotenberg = Kotenberg(gotenbergTestContainer.endpoint)
 
-        val result =
-            kotenberg.markdown {
-                file("src/test/resources/markdown/index.html")
-                file("src/test/resources/markdown/test.md")
-            }
+        val result = kotenberg.markdown {
+            file("src/test/resources/markdown/index.html")
+            file("src/test/resources/markdown/test.md")
+        }
 
         assertEquals(200, result.status.value)
         assertEquals("application/pdf", result.headers[HttpHeaders.ContentType])
@@ -134,11 +130,10 @@ class KotenbergDslTest {
     fun `should convert multiple LibreOffice documents to zip using DSL`() = runTest {
         val kotenberg = Kotenberg(gotenbergTestContainer.endpoint)
 
-        val result =
-            kotenberg.libreOffice {
-                file("src/test/resources/libreoffice/test.docx")
-                file("src/test/resources/libreoffice/test.xlsx")
-            }
+        val result = kotenberg.libreOffice {
+            file("src/test/resources/libreoffice/test.docx")
+            file("src/test/resources/libreoffice/test.xlsx")
+        }
 
         assertEquals(200, result.status.value)
         assertEquals("application/zip", result.headers[HttpHeaders.ContentType])
@@ -148,14 +143,13 @@ class KotenbergDslTest {
     fun `should convert with PDF engines using DSL`() = runTest {
         val kotenberg = Kotenberg(gotenbergTestContainer.endpoint)
 
-        val result =
-            kotenberg.pdfEngines {
-                file("src/test/resources/test.pdf")
-                pageProperties {
-                    pdfUniversalAccess = true
-                    pdfFormat = PdfFormat.A_3B
-                }
+        val result = kotenberg.pdfEngines {
+            file("src/test/resources/test.pdf")
+            pageProperties {
+                pdfUniversalAccess = true
+                pdfFormat = PdfFormat.A_3B
             }
+        }
 
         assertEquals(200, result.status.value)
         assertEquals("application/pdf", result.headers[HttpHeaders.ContentType])
@@ -165,12 +159,11 @@ class KotenbergDslTest {
     fun `should convert multiple PDFs to zip with PDF engines using DSL`() = runTest {
         val kotenberg = Kotenberg(gotenbergTestContainer.endpoint)
 
-        val result =
-            kotenberg.pdfEngines {
-                file("src/test/resources/test.pdf")
-                file("src/test/resources/test2.pdf")
-                pageProperties { pdfUniversalAccess = true }
-            }
+        val result = kotenberg.pdfEngines {
+            file("src/test/resources/test.pdf")
+            file("src/test/resources/test2.pdf")
+            pageProperties { pdfUniversalAccess = true }
+        }
 
         assertEquals(200, result.status.value)
         assertEquals("application/zip", result.headers[HttpHeaders.ContentType])
@@ -183,11 +176,10 @@ class KotenbergDslTest {
         val files =
             listOf(File("src/test/resources/test.pdf"), File("src/test/resources/test2.pdf"))
 
-        val result =
-            kotenberg.mergePdfs {
-                files(files)
-                pageProperties { pdfUniversalAccess = true }
-            }
+        val result = kotenberg.mergePdfs {
+            files(files)
+            pageProperties { pdfUniversalAccess = true }
+        }
 
         assertEquals(200, result.status.value)
         assertEquals("application/pdf", result.headers[HttpHeaders.ContentType])
@@ -209,11 +201,10 @@ class KotenbergDslTest {
             pageRange(1, 5)
         }
 
-        val result =
-            kotenberg.html {
-                file("src/test/resources/html/index.html")
-                pageProperties(props)
-            }
+        val result = kotenberg.html {
+            file("src/test/resources/html/index.html")
+            pageProperties(props)
+        }
 
         assertEquals(200, result.status.value)
         assertEquals("application/pdf", result.headers[HttpHeaders.ContentType])

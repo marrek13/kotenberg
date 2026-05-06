@@ -19,19 +19,11 @@ dependencies {
     testImplementation(libs.testcontainers.jupiter)
 }
 
-tasks {
-    test {
-        useJUnitPlatform()
-    }
-}
+tasks { test { useJUnitPlatform() } }
 
-repositories {
-    mavenCentral()
-}
+repositories { mavenCentral() }
 
-ktfmt {
-    kotlinLangStyle()
-}
+ktfmt { kotlinLangStyle() }
 
 publishing {
     publications {
