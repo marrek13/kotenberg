@@ -52,4 +52,4 @@ jobs:
           TOKEN=$(echo -n "$USER_PASS" | base64 -w0)
           curl -fsS -X POST \
             -H "Authorization: Bearer ${TOKEN}" \
-            "https://ossrh-staging-api.central.sonatype.com/manual/upload/defaultRepository/dev.marrek13?publishing_type=automatic"
+            "https://ossrh-staging-api.central.sonatype.com/manual/upload/defaultRepository/io.github.marrek13?publishing_type=automatic"

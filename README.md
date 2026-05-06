@@ -59,9 +59,31 @@ response.entity.content.use { input ->
 
 ## Installation
 
-Add `Kotenberg` to your project using Gradle or Maven:
+### Maven Central (recommended)
 
-### Gradle Kotlin DSL
+```kotlin
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation("io.github.marrek13:kotenberg:1.0.0")
+}
+```
+
+```xml
+<dependency>
+    <groupId>io.github.marrek13</groupId>
+    <artifactId>kotenberg</artifactId>
+    <version>1.0.0</version>
+</dependency>
+```
+
+### GitHub Packages
+
+Coordinates use `dev.marrek13`. Registry requires authentication.
+
+#### Gradle Kotlin DSL
 
 ```kotlin
 repositories {
@@ -79,7 +101,7 @@ dependencies {
 }
 ```
 
-### Maven
+#### Maven
 
 ```xml
 <repository>

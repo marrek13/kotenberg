@@ -1,3 +1,5 @@
+import org.gradle.api.publish.maven.MavenPublication
+import org.gradle.api.publish.maven.tasks.PublishToMavenRepository
 import org.gradle.api.tasks.javadoc.Javadoc
 
 plugins {
@@ -35,6 +37,32 @@ repositories { mavenCentral() }
 
 ktfmt { kotlinLangStyle() }
 
+fun MavenPublication.configureKotenbergPom() {
+    pom {
+        name = "Kotenberg"
+        description.set("Type-safe Kotlin client for the Gotenberg document conversion HTTP API.")
+        url.set("https://github.com/marrek13/kotenberg")
+        licenses {
+            license {
+                name.set("MIT")
+                url.set("https://opensource.org/licenses/MIT")
+            }
+        }
+        developers {
+            developer {
+                id.set("marrek13")
+                name.set("Mariusz Sołtysiak")
+                url.set("https://github.com/marrek13")
+            }
+        }
+        scm {
+            connection.set("scm:git:https://github.com/marrek13/kotenberg.git")
+            developerConnection.set("scm:git:ssh://git@github.com/marrek13/kotenberg.git")
+            url.set("https://github.com/marrek13/kotenberg")
+        }
+    }
+}
+
 val mavenCentralUsername =
     System.getenv("MAVEN_CENTRAL_USERNAME") ?: findProperty("mavenCentralUsername")?.toString()
 val mavenCentralPassword =
@@ -57,38 +85,19 @@ if (
 
 publishing {
     publications {
-        create<MavenPublication>("maven") {
+        create<MavenPublication>("mavenGithub") {
             groupId = group.toString()
             artifactId = project.name
             version = project.version.toString()
-
             from(components["java"])
-
-            pom {
-                name = "Kotenberg"
-                description.set(
-                    "Type-safe Kotlin client for the Gotenberg document conversion HTTP API."
-                )
-                url.set("https://github.com/marrek13/kotenberg")
-                licenses {
-                    license {
-                        name.set("MIT")
-                        url.set("https://opensource.org/licenses/MIT")
-                    }
-                }
-                developers {
-                    developer {
-                        id.set("marrek13")
-                        name.set("Mariusz Sołtysiak")
-                        url.set("https://github.com/marrek13")
-                    }
-                }
-                scm {
-                    connection.set("scm:git:https://github.com/marrek13/kotenberg.git")
-                    developerConnection.set("scm:git:ssh://git@github.com/marrek13/kotenberg.git")
-                    url.set("https://github.com/marrek13/kotenberg")
-                }
-            }
+            configureKotenbergPom()
+        }
+        create<MavenPublication>("mavenCentral") {
+            groupId = "io.github.marrek13"
+            artifactId = project.name
+            version = project.version.toString()
+            from(components["java"])
+            configureKotenbergPom()
         }
     }
 
@@ -119,12 +128,21 @@ publishing {
     }
 }
 
+tasks.withType<PublishToMavenRepository>().configureEach {
+    enabled =
+        when (repository.name) {
+            "GitHubPackages" -> publication.name == "mavenGithub"
+            "MavenCentral" -> publication.name == "mavenCentral"
+            else -> false
+        }
+}
+
 signing {
     val signingKey = signingKeyForCentral
     val signingPassword =
         System.getenv("SIGNING_PASSWORD") ?: findProperty("signingPassword")?.toString()
     if (!signingKey.isNullOrBlank()) {
         useInMemoryPgpKeys(signingKey, signingPassword)
-        sign(publishing.publications["maven"])
+        sign(publishing.publications["mavenCentral"])
     }
 }
