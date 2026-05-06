@@ -37,13 +37,17 @@ jobs:
 
       # maven-publish uses the OSSRH “Maven-like” PUT API; Central Portal then needs this follow-up
       # from the same runner IP. See https://central.sonatype.org/publish/publish-portal-ossrh-staging-api/
+      # (Cannot use secrets.* in step `if:` — skip inside the script when credentials are absent.)
       - name: Submit build to Central Publisher (Maven Central)
-        if: ${{ secrets.MAVEN_CENTRAL_USERNAME != '' && secrets.MAVEN_CENTRAL_PASSWORD != '' }}
         env:
           MAVEN_CENTRAL_USERNAME: ${{ secrets.MAVEN_CENTRAL_USERNAME }}
           MAVEN_CENTRAL_PASSWORD: ${{ secrets.MAVEN_CENTRAL_PASSWORD }}
         run: |
           set -euo pipefail
+          if [ -z "${MAVEN_CENTRAL_USERNAME:-}" ] || [ -z "${MAVEN_CENTRAL_PASSWORD:-}" ]; then
+            echo "Skipping Central Publisher submit (Maven Central secrets not configured)."
+            exit 0
+          fi
           USER_PASS="${MAVEN_CENTRAL_USERNAME}:${MAVEN_CENTRAL_PASSWORD}"
           TOKEN=$(echo -n "$USER_PASS" | base64 -w0)
           curl -fsS -X POST \
