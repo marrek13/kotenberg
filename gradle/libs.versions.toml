@@ -3,7 +3,7 @@ kotlin = "2.3.20"
 ktfmt = "0.26.0"
 commonsIo = "2.21.0"
 junit = "6.0.3"
-coroutines = "1.10.2"
+coroutines = "1.11.0"
 ktor="3.4.1"
 testContainers="1.21.4"
 
