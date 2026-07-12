@@ -8,7 +8,7 @@ jobs:
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
 
       - name: Install Java
-        uses: actions/setup-java@be666c2fcd27ec809703dec50e508c2fdc7f6654
+        uses: actions/setup-java@0f481fcb613427c0f801b606911222b5b6f3083a
         with:
           java-version: 17
           distribution: 'temurin'
