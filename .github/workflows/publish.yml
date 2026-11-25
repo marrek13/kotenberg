@@ -20,7 +20,7 @@ jobs:
           echo "version=${release_number}" > gradle.properties
 
       - name: Install Java
-        uses: actions/setup-java@b843ebf9b913146b38da2eaa7aeddf76074ae1ad
+        uses: actions/setup-java@d1374f8ac74474200d16ef8ecee22c7ae7a51880
         with:
           java-version: 17
           distribution: 'temurin'
